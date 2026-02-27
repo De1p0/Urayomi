@@ -32,18 +32,18 @@ export default function TitleBar() {
 
                     <div className="flex items-center gap-2 px-3 select-none pointer-events-none">
                          <svg width="18" height="18" viewBox="0 0 200 200" className="opacity-90">
-                              <rect x="20" y="20" width="160" height="160" rx="20" fill="none" stroke="currentColor" strokeWidth="12" />
-                              <text x="100" y="85" fill="currentColor" fontWeight="900" fontSize="50" textAnchor="middle">URA</text>
-                              <text x="100" y="145" fill="currentColor" fontWeight="900" fontSize="50" textAnchor="middle">YOMI</text>
+                              <rect x="20" y="20" width="160" height="160" rx="20" fill="none" stroke="#FF5C5C" strokeWidth="12" />
+                              <text x="100" y="85" fill="#FF5C5C" fontWeight="900" fontSize="50" textAnchor="middle">URA</text>
+                              <text x="100" y="145" fill="#FF5C5C" fontWeight="900" fontSize="50" textAnchor="middle">YOMI</text>
                          </svg>
-                         <span className="text-[10px] font-black tracking-[0.2em] uppercase text-white/80">Urayomi</span>
+                         <span className="text-[10px] font-black tracking-[0.2em] uppercase text-accent">Urayomi</span>
                     </div>
                </div>
 
                <div className="flex-1 max-w-md px-4 no-drag">
                     <div className="relative group">
                          <div className="absolute inset-y-0 left-0 flex items-center pl-2 pointer-events-none">
-                              <MagnifyingGlassIcon className="w-3.5 h-3.5 text-gray-500 group-focus-within:text-blue-400 transition-colors" />
+                              <MagnifyingGlassIcon className="w-3.5 h-3.5 text-gray-500 group-focus-within:text-accent transition-colors" />
                          </div>
                          <input
                               type="text"

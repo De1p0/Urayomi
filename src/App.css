@@ -34,6 +34,8 @@
      
      --color-surface: var(--bg-titlebar);
      --color-background: var(--bg-main);
+     --color-primary-text: var(--text-main);
+     --color-accent: #FF5C5C;
 }
 
 

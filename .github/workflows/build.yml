@@ -51,8 +51,9 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
+          uploadPlainBinary: true # I CANNOT TELL IF THIS WORKS HOLY SHITTT
           tagName: v__VERSION__ 
-          releaseName: 'App v__VERSION__'
+          releaseName: 'Urayomi v__VERSION__'
           releaseBody: |
             ##  Download Info
             Select the installer or portable for your platform below.
