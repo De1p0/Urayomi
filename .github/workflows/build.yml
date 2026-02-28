@@ -2,13 +2,14 @@ name: 'publish'
 
 on:
   push:
-    branches:
-      - main 
+    tags:
+      - 'v*'   # Build only when pushing tags like v0.2.0
 
 jobs:
   publish-tauri:
     permissions:
       contents: write
+
     strategy:
       fail-fast: false
       matrix:
@@ -23,6 +24,7 @@ jobs:
             args: ''
 
     runs-on: ${{ matrix.platform }}
+
     steps:
       - uses: actions/checkout@v4
         with:
@@ -32,28 +34,31 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: lts/*
+          cache: 'npm' # Enables automatic npm caching based on package-lock.json
 
       - name: install Rust stable
         uses: dtolnay/rust-toolchain@stable
         with:
           targets: ${{ matrix.platform == 'macos-latest' && 'aarch64-apple-darwin,x86_64-apple-darwin' || '' }}
 
-      - name: install dependencies (ubuntu only)
+      - uses: Swatinem/rust-cache@v2 # Smart Rust cache (registry + target dir)
+
+      - name: install dependencies (ubuntu only)       
         if: matrix.platform == 'ubuntu-22.04'
         run: |
           sudo apt-get update
           sudo apt-get install -y libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf
 
       - name: install frontend dependencies
-        run: yarn install 
+        run: npm ci # Clean, reproducible install for CI (requires package-lock.json)
 
       - uses: tauri-apps/tauri-action@v0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           uploadPlainBinary: true # I CANNOT TELL IF THIS WORKS HOLY SHITTT
-          tagName: v__VERSION__ 
-          releaseName: 'Urayomi v__VERSION__'
+          tagName: ${{ github.ref_name }} 
+          releaseName: 'Urayomi ${{ github.ref_name }}'
           releaseBody: |
             ##  Download Info
             Select the installer or portable for your platform below.

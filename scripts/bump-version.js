@@ -59,9 +59,10 @@ try {
     try {
         execSync('git add package.json src-tauri/Cargo.toml', { stdio: 'inherit' });
         execSync(`git commit -m "chore: bump version to ${newVersion}"`, { stdio: 'inherit' });
-        console.log(`Created git commit v${newVersion}`);
+        execSync(`git tag v${newVersion}`, { stdio: 'inherit' });
+        console.log(`Created git commit and tag v${newVersion}`);
     } catch (err) {
-        console.warn('Could not create git commit. Please do it manually.');
+        console.warn('Could not create git commit/tag. Please do it manually.');
     }
 
     console.log(`\nVersion bumped successfully! Run 'git push origin main --tags' to push.`);
