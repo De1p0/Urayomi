@@ -1,8 +1,12 @@
 #!/usr/bin/env node
 
-const fs = require('fs');
-const path = require('path');
-const { execSync } = require('child_process');
+import fs from 'fs';
+import path from 'path';
+import { execSync } from 'child_process';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const targetVersion = process.argv[2];
 
@@ -41,7 +45,7 @@ try {
 
     pkg.version = newVersion;
     fs.writeFileSync(pkgPath, JSON.stringify(pkg, null, 2) + '\n');
-    console.log('✓ Updated package.json');
+    console.log('Updated package.json');
 
     const cargoPath = path.join(__dirname, '../src-tauri/Cargo.toml');
     let cargo = fs.readFileSync(cargoPath, 'utf8');
@@ -50,15 +54,14 @@ try {
         `version = "${newVersion}"`
     );
     fs.writeFileSync(cargoPath, cargo);
-    console.log('✓ Updated src-tauri/Cargo.toml');
+    console.log('Updated src-tauri/Cargo.toml');
 
     try {
         execSync('git add package.json src-tauri/Cargo.toml', { stdio: 'inherit' });
         execSync(`git commit -m "chore: bump version to ${newVersion}"`, { stdio: 'inherit' });
-        execSync(`git tag v${newVersion}`, { stdio: 'inherit' });
-        console.log(`✓ Created git commit and tag v${newVersion}`);
+        console.log(`Created git commit v${newVersion}`);
     } catch (err) {
-        console.warn('Could not create git commit/tag. Please do it manually.');
+        console.warn('Could not create git commit. Please do it manually.');
     }
 
     console.log(`\nVersion bumped successfully! Run 'git push origin main --tags' to push.`);
