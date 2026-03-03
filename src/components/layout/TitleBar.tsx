@@ -9,6 +9,7 @@ import {
      ChevronDownIcon
 } from '@heroicons/react/24/outline';
 import { useConfigStore } from '../../stores/configStore';
+import { useNavigate } from 'react-router-dom';
 
 
 export default function TitleBar() {
@@ -16,21 +17,26 @@ export default function TitleBar() {
      const appWindow = useMemo(() => getCurrentWindow(), []);
      const [query, setQuery] = useState("")
      const { config, setConfig } = useConfigStore();
+     const navigate = useNavigate();
 
 
 
+     
      async function handleSearch() {
           if (!query.trim()) return;
 
           let results: any = []; // holy FUCK im sleep deprived i cant do this no more idc if im using the any type now
+                    // results of the FUCKING SEARCH DFGSHIUGDFOIUH 
 
           for (const source of config.installedSources) {
                const res = await source.search(query, 1, []);
-               if (res && res.list) {
-                    // results of the FUCKING SEARCH DFGSHIUGDFOIUH 
-                    console.log([...results, ...res.list])
+               if (res?.list) {
+                      results = [...results, ...res.list];
                }
           }
+
+          navigate("/search", { state: { results, query } });
+          
 
      }
 

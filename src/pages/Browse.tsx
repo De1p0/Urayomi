@@ -76,7 +76,7 @@ export default function Browse() {
                             onClick={(e) => {
                                 handleInstall(source)
                             }}
-                            className={`w-full py-2 px-4 rounded-lg ${config.installedSourcesName.some(s => s.id == source.id) ? "bg-primary-text/80" : "bg-primary-text"} text-secondary-bg text-xs font-bold transition-opacity cursor-pointer`}
+                            className={`w-full py-2 px-4 rounded-lg ${config.installedSourcesName.some(s => s.id == source.id) ? "bg-primary-text/80" : "bg-primary-text/90"} text-surface/80 text-xs font-bold transition-opacity cursor-pointer`}
                         >
                             {config.installedSourcesName.some(s => s.id == source.id) ? "Installed" : "Install"}
                         </button>
