@@ -1,5 +1,6 @@
 import { ArrowDownIcon, ChevronDownIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
+import Book from "../components/shared/Book";
 
 export default function Library() {
     // this is for test ONLY remove once library fn is fully implemented
@@ -8,18 +9,19 @@ export default function Library() {
     const [filter, setFilter] = useState("All")
 
     let library = [
-        //     {
-        //     name: "The Fragrant Flower Blooms with Dignity",
-        //     imageSrc: "https://upload.wikimedia.org/wikipedia/en/thumb/a/a5/Kaoru_Hana_wa_Rin_to_Saku_volume_1_cover.jpg/250px-Kaoru_Hana_wa_Rin_to_Saku_volume_1_cover.jpg",
-        //     currentChapter: 12,
-        //     maximumChapters: 333,
-        // }, {
+        {
+            "name": "RuriDragon",
+            "imageUrl": "https://uploads.mangadex.org/covers/141609b6-cf86-4266-904c-6648f389cdc9/216d1ce9-2195-4ad3-9502-be95b06a3502.jpg",
+            "link": "/manga/141609b6-cf86-4266-904c-6648f389cdc9"
+        }
+
+        // , {
         //     name: "Ruri Dragon",
         //     imageSrc: "https://upload.wikimedia.org/wikipedia/en/2/24/RuriDragon_vol._1_cover.jpg",
         //     currentChapter: 12,
         //     maximumChapters: 12,
         // }, {
-        //     name: "Kimi wa Yotsuba no Clover",
+        //     name: "Kimi wa Yotsuba no Clover", 
         //     imageSrc: "https://jpbookstore.com/cdn/shop/files/81NCqrHV51L._SL1500_1024x1024.jpg?v=1752505281",
         //     currentChapter: 12,
         //     maximumChapters: 333,
@@ -103,34 +105,7 @@ export default function Library() {
             <div className="overflow-y-auto flex flex-wrap gap-5 content-start">
 
                 {library.map((book, index) => (
-                    <div
-                        key={index}
-                        className="group relative w-full max-w-50 aspect-2/3 rounded-xl overflow-hidden shadow-2xl transition-transform"
-                    >
-
-                        {book.maximumChapters - book.currentChapter > 0 && (
-                            <span className="absolute top-2 left-2 px-2 py-1 text-[10px] tracking-wider font-bold text-white bg-accent backdrop-blur-md rounded-md z-10">
-                                {book.maximumChapters - book.currentChapter}
-                            </span>
-                        )}
-
-                        <img
-                            src={book.imageSrc}
-                            className="w-full h-full object-cover"
-                            alt={book.name}
-                        />
-
-                        <div className="absolute inset-0 bg-linear-to-t from-black/90 via-black/20 to-transparent" />
-
-                        <span
-                            className={`absolute bottom-0 left-0 p-3 text-sm text-white font-semibold leading-tight drop-shadow-md wrap-break-words ${book.name.length > 30
-                                ? "max-w-full"
-                                : "max-w-[75%]"
-                                }`}
-                        >
-                            {book.name}
-                        </span>
-                    </div>
+                    <Book book={book} />
                 ))}
             </div>
 

@@ -1,13 +1,14 @@
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { Manga } from "../types/ExtensionData";
-import Book from "../components/shared/Manga";
+import Book from "../components/shared/Book";
 import { useConfigStore } from "../stores/configStore";
 
 export default function Search() {
     const location = useLocation();
     const { config, setSearch } = useConfigStore();
     const { searchResults, searchQuery } = config;
+
 
     useEffect(() => {
         if (location.state?.results && location.state?.query) {

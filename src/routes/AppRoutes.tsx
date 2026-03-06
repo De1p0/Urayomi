@@ -1,25 +1,45 @@
-import { Routes, Route, useLocation } from "react-router-dom";
-import Library from "../pages/Library";
-import Settings from "../pages/Settings";
-import { useEffect } from "react";
-import { getSourceList } from "../ExtensionHandler/SourceLoader";
+import React from "react";
+import BookDetailsPage from "../components/shared/BookDetails";
 import Browse from "../pages/Browse";
+import Library from "../pages/Library";
 import Search from "../pages/Search";
-
+import Settings from "../pages/Settings";
+import { useConfigStore } from "../stores/configStore";
 
 export default function AnimatedRoutes() {
-    const location = useLocation();
+    const config = useConfigStore((state) => state.config);
+
+    const renderContent = (
+        DefaultComponent: React.ComponentType
+    ): React.ReactNode => {
+        console.log(config.currentPage, config.pageRoutes)
+
+
+        if (config.pageRoutes[config.currentPage]?.route?.includes('/books/')) {
+            return <BookDetailsPage />;
+        }
+        return <DefaultComponent />;
+    };
+
 
 
     return (
-        <Routes location={location}>
-            <Route path="/" element={<Library />} />
-            <Route path="/settings" element={<Settings />} />
-            <Route path="/browse" element={<Browse />} />
-            <Route path="/search" element={<Search />} />
-            {/* <Route path="/browse" element={<Browse />} />
-            <Route path="/history" element={<History />} />
-            <Route path="/search" element={<Search />} /> */}
-        </Routes>
+        <div className="relative w-full h-full">
+            <div className={config.currentPage === 'library' ? 'block h-full' : 'hidden'}>
+                {renderContent(Library)}
+            </div>
+
+            <div className={config.currentPage === 'search' ? 'block h-full' : 'hidden'}>
+                {renderContent(Search)}
+            </div>
+
+            <div className={config.currentPage === 'browse' ? 'block h-full' : 'hidden'}>
+                {renderContent(Browse)}
+            </div>
+
+            <div className={config.currentPage === 'settings' ? 'block h-full' : 'hidden'}>
+                {renderContent(Settings)}
+            </div>
+        </div>
     );
-}                          
+}

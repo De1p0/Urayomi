@@ -1,8 +1,20 @@
+import { Link, useNavigate } from "react-router-dom";
 import { Manga } from "../../types/ExtensionData";
+import { useConfigStore } from "../../stores/configStore";
 
 export default function Book({ book }: { book: Manga }) {
+    const { config, setPageRoute } = useConfigStore()
+
+
     return (<div
-        className="group relative w-full max-w-50 aspect-2/3 rounded-xl overflow-hidden shadow-2xl transition-transform"
+
+
+        onClick={() => {
+            config.pageRoutes[config.currentPage].state = book;
+            setPageRoute(config.currentPage, `/books/${book.name}`);
+
+        }}
+        className="group relative w-full max-w-50 aspect-2/3 rounded-xl overflow-hidden shadow-2xl transition-all hover:opacity-80"
     >
 
         {/* {book.maximumChapters - book.currentChapter > 0 && (
@@ -11,7 +23,7 @@ export default function Book({ book }: { book: Manga }) {
             </span>
         )} */}
 
-        <img
+        < img
             src={book.imageUrl}
             className="w-full h-full object-cover"
             alt={book.name}
@@ -27,5 +39,5 @@ export default function Book({ book }: { book: Manga }) {
         >
             {book.name}
         </span>
-    </div>)
-}
+    </div >)
+}  

@@ -14,15 +14,16 @@ export default function TitleBar() {
      const [isMaximized, setIsMaximized] = useState(false);
      const appWindow = useMemo(() => getCurrentWindow(), []);
      const [query, setQuery] = useState("");
-     const { setSearch } = useConfigStore();
+     const { setSearch, setConfig } = useConfigStore();
      const navigate = useNavigate();
 
      async function handleSearch() {
           if (!query.trim()) return;
 
           let results: any[] = [];
+          const { config, setSearch, setConfig } = useConfigStore.getState();
 
-          const { config } = useConfigStore.getState();
+          // 1. Fetching logic remains the same
           for (const source of config.installedSources) {
                const res = await source.search(query, 1, []);
                if (res?.list) {
@@ -31,6 +32,8 @@ export default function TitleBar() {
           }
 
           setSearch(results, query);
+
+          setConfig("currentPage", "search");
 
           navigate("/search");
      }

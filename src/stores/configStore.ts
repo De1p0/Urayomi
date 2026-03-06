@@ -8,8 +8,25 @@ export interface AppConfig {
     sourceList: string;
     installedSourcesName: SourceResponse[];
     installedSources: DefaultExtension[];
-
-    // Search state
+    currentPage: PageName;
+    pageRoutes: {
+        library: {
+            route: string;
+            state: any
+        };
+        search: {
+            route: string;
+            state: any
+        };
+        browse: {
+            route: string;
+            state: any
+        };
+        settings: {
+            route: string;
+            state: any
+        };
+    };
     searchResults: Manga[];
     searchQuery: string;
 }
@@ -17,6 +34,7 @@ export interface AppConfig {
 interface ConfigStore {
     config: AppConfig;
     setConfig: <K extends keyof AppConfig>(key: K, value: AppConfig[K]) => void;
+    setPageRoute: (page: keyof AppConfig['pageRoutes'], path: string) => void;
     setSearch: (results: Manga[], query: string) => void;
     clearSearch: () => void;
 }
@@ -27,7 +45,26 @@ export const useConfigStore = create<ConfigStore>()(
             config: {
                 theme: 'system',
                 sources: [],
+                pageRoutes: {
+                    library: {
+                        route: "/",
+                        state: {}
+                    },
+                    search: {
+                        route: "/",
+                        state: {}
+                    },
+                    browse: {
+                        route: "/",
+                        state: {}
+                    },
+                    settings: {
+                        route: "/",
+                        state: {}
+                    },
+                },
                 sourceList: "",
+                currentPage: "library",
                 installedSources: [],
                 installedSourcesName: [],
                 searchResults: [],
@@ -41,6 +78,20 @@ export const useConfigStore = create<ConfigStore>()(
                 if (key === 'theme') {
                     applyTheme(value as AppConfig['theme']);
                 }
+            },
+            setPageRoute: (page, path) => {
+                set((state) => ({
+                    config: {
+                        ...state.config,
+                        pageRoutes: {
+                            ...state.config.pageRoutes,
+                            [page]: {
+                                ...state.config.pageRoutes[page],
+                                route: path,
+                            },
+                        },
+                    },
+                }));
             },
             setSearch: (results, query) => {
                 set((state) => ({
