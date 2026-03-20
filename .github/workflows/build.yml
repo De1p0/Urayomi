@@ -128,10 +128,35 @@ jobs:
         run: rustup target add aarch64-apple-ios x86_64-apple-ios aarch64-apple-ios-sim
       - name: install frontend dependencies
         run: npm ci
+      - name: create xcodebuild wrapper
+        run: |
+          mkdir -p "$HOME/.bin"
+          cat > "$HOME/.bin/xcodebuild" << 'EOF'
+          #!/bin/bash
+          ARGS=()
+          for arg in "$@"; do
+            if [[ "$arg" != "-allowProvisioningUpdates" ]]; then
+              ARGS+=("$arg")
+            fi
+          done
+          ARGS+=(
+            "CODE_SIGNING_ALLOWED=NO"
+            "CODE_SIGNING_REQUIRED=NO"
+            "CODE_SIGN_IDENTITY="
+            "DEVELOPMENT_TEAM=XXXXXXXXXX"
+          )
+          exec /Applications/Xcode_16.4.app/Contents/Developer/usr/bin/xcodebuild "${ARGS[@]}"
+          EOF
+          chmod +x "$HOME/.bin/xcodebuild"
+          echo "$HOME/.bin" >> $GITHUB_PATH
       - name: init iOS project
         run: npm run tauri ios init
+        env:
+          APPLE_DEVELOPMENT_TEAM: XXXXXXXXXX
       - name: build iOS IPA (unsigned, sideloadable)
         run: npm run tauri ios build -- --export-method debugging
+        env:
+          APPLE_DEVELOPMENT_TEAM: XXXXXXXXXX
       - name: upload iOS IPA to release
         uses: softprops/action-gh-release@v2
         with:
