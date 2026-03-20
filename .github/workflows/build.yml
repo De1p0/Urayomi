@@ -65,6 +65,49 @@ jobs:
           generateReleaseNotes: true
           args: ${{ matrix.args }}
 
+  publish-android:
+    permissions:
+      contents: write
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+          cache: 'npm'
+      - name: install Rust stable
+        uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+      - name: install Android targets
+        run: rustup target add aarch64-linux-android armv7-linux-androideabi i686-linux-android x86_64-linux-android
+      - name: setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+      - name: setup Android SDK
+        uses: android-actions/setup-android@v3
+      - name: install NDK
+        run: sdkmanager "ndk;27.0.12077973"
+      - name: install frontend dependencies
+        run: npm ci
+      - name: init Android project
+        run: npm run tauri android init
+      - name: build Android APK
+        env:
+          NDK_HOME: ${{ env.ANDROID_HOME }}/ndk/27.0.12077973
+        run: npm run tauri android build -- --apk
+      - name: upload Android APK to release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.event.inputs.tag_name || github.ref_name }}
+          files: src-tauri/gen/android/app/build/outputs/apk/universal/release/*.apk
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
   publish-ios:
     permissions:
       contents: write
@@ -82,14 +125,15 @@ jobs:
         uses: dtolnay/rust-toolchain@stable
       - uses: Swatinem/rust-cache@v2
       - name: install iOS targets
-        run: |
-          rustup target add aarch64-apple-ios x86_64-apple-ios aarch64-apple-ios-sim
+        run: rustup target add aarch64-apple-ios x86_64-apple-ios aarch64-apple-ios-sim
       - name: install frontend dependencies
         run: npm ci
       - name: init iOS project
         run: npm run tauri ios init
       - name: build iOS IPA (unsigned, sideloadable)
         run: npm run tauri ios build -- --export-method debugging
+        env:
+          APPLE_DEVELOPMENT_TEAM: ${{ secrets.APPLE_DEVELOPMENT_TEAM }}
       - name: upload iOS IPA to release
         uses: softprops/action-gh-release@v2
         with:
