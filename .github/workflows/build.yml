@@ -9,6 +9,7 @@ on:
         description: 'Tag name for the release (e.g. v0.2.0)'
         required: true
         type: string
+
 jobs:
   publish-tauri:
     permissions:
@@ -52,62 +53,17 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           uploadPlainBinary: true
-          tagName: ${{ github.ref_name }}
-          releaseName: 'Urayomi ${{ github.ref_name }}'
+          tagName: ${{ github.event.inputs.tag_name || github.ref_name }}
+          releaseName: 'Urayomi ${{ github.event.inputs.tag_name || github.ref_name }}'
           releaseBody: |
             ##  Download Info
             Select the installer or portable for your platform below.
-
             ##  Changelog
             Check the automated notes below for a list of all changes in this version.
           releaseDraft: false
           prerelease: false
           generateReleaseNotes: true
           args: ${{ matrix.args }}
-
-  publish-android:
-    permissions:
-      contents: write
-    runs-on: ubuntu-22.04
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - name: setup node
-        uses: actions/setup-node@v4
-        with:
-          node-version: lts/*
-          cache: 'npm'
-      - name: install Rust stable
-        uses: dtolnay/rust-toolchain@stable
-      - uses: Swatinem/rust-cache@v2
-      - name: install Android targets
-        run: |
-          rustup target add aarch64-linux-android armv7-linux-androideabi i686-linux-android x86_64-linux-android
-      - name: setup Java
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'temurin'
-          java-version: '17'
-      - name: setup Android SDK
-        uses: android-actions/setup-android@v3
-      - name: install NDK
-        run: sdkmanager "ndk;27.0.12077973"
-      - name: install frontend dependencies
-        run: npm ci
-      - name: init Android project
-        run: npm run tauri android init
-      - name: build Android APK
-        env:
-          NDK_HOME: ${{ env.ANDROID_HOME }}/ndk/27.0.12077973
-        run: npm run tauri android build -- --apk
-      - name: upload Android APK to release
-        uses: softprops/action-gh-release@v2
-        with:
-          tag_name: ${{ github.ref_name }}
-          files: src-tauri/gen/android/app/build/outputs/apk/universal/release/*.apk
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   publish-ios:
     permissions:
@@ -132,18 +88,12 @@ jobs:
         run: npm ci
       - name: init iOS project
         run: npm run tauri ios init
-      - name: build iOS IPA (no signing)
-        run: npm run tauri ios build -- --export-method development
-        # NOTE: For signed/distributed builds, add these env vars from your secrets:
-        # env:
-        #   APPLE_CERTIFICATE: ${{ secrets.APPLE_CERTIFICATE }}
-        #   APPLE_CERTIFICATE_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
-        #   APPLE_PROVISIONING_PROFILE: ${{ secrets.APPLE_PROVISIONING_PROFILE }}
-        #   APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+      - name: build iOS IPA (unsigned, sideloadable)
+        run: npm run tauri ios build -- --export-method debugging
       - name: upload iOS IPA to release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: ${{ github.ref_name }}
+          tag_name: ${{ github.event.inputs.tag_name || github.ref_name }}
           files: src-tauri/gen/apple/build/arm64/*.ipa
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
