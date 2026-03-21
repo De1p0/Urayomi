@@ -133,6 +133,13 @@ jobs:
           mkdir -p "$HOME/.bin"
           cat > "$HOME/.bin/xcodebuild" << 'EOF'
           #!/bin/bash
+          # Skip the exportArchive step entirely - we package manually
+          for arg in "$@"; do
+            if [[ "$arg" == "-exportArchive" ]]; then
+              echo "Skipping exportArchive - will package manually"
+              exit 0
+            fi
+          done
           ARGS=()
           for arg in "$@"; do
             if [[ "$arg" != "-allowProvisioningUpdates" ]]; then
@@ -153,14 +160,22 @@ jobs:
         run: npm run tauri ios init
         env:
           APPLE_DEVELOPMENT_TEAM: XXXXXXXXXX
-      - name: build iOS IPA (unsigned, sideloadable)
+      - name: build iOS app
         run: npm run tauri ios build -- --export-method debugging
         env:
           APPLE_DEVELOPMENT_TEAM: XXXXXXXXXX
+      - name: package IPA manually
+        run: |
+          APP_PATH=$(find ~/Library/Developer/Xcode/DerivedData -name "lnreader.app" -path "*/release-iphoneos/*" | head -1)
+          echo "Found app at: $APP_PATH"
+          mkdir -p Payload
+          cp -r "$APP_PATH" Payload/
+          zip -r Urayomi.ipa Payload
+          ls -la Urayomi.ipa
       - name: upload iOS IPA to release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ github.event.inputs.tag_name || github.ref_name }}
-          files: src-tauri/gen/apple/build/arm64/*.ipa
+          files: Urayomi.ipa
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
