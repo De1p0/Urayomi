@@ -1,6 +1,6 @@
 [package]
 name = "Urayomi"
-version = "0.5.2"
+version = "0.5.3"
 description = "Lightweight manga reader"
 authors = ["you"]
 edition = "2021"
