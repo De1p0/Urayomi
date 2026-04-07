@@ -1,9 +1,10 @@
 # Urayomi
 **Urayomi** is an open-source manga reader that supports every device, from desktop to mobile.  
-
 ## Showcase
-![Showcase Page](showcase/page.png)  
-![Reading Mode](showcase/reading.png)  
+<div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+  <img src="showcase/page.png" alt="Showcase Page" width="45%">
+  <img src="showcase/reading.png" alt="Reading Mode" width="45%">
+</div>
 
 ## Available Platforms
 
