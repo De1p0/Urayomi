@@ -65,11 +65,11 @@ export default function Sidebar() {
         >
             <nav className="flex flex-col h-full mt-1">
                 <ul className="space-y-2 flex flex-col h-full">
-                    <li className="border-b pb-2 border-white/10">
+                    <li className="border-b pb-2 border-primary-text/10">
                         <button
                             type="button"
                             onMouseUp={() => setIsExpanded(!isExpanded)}
-                            className="flex h-10 items-center p-2 rounded-md hover:bg-white/5 group gap-3"
+                            className="flex h-10 items-center p-2 rounded-md hover:bg-primary-text/5 group gap-3"
                             aria-label="Toggle Sidebar"
                         >
                             <Bars3Icon className="w-5 h-5 shrink-0 text-copy-light" />
@@ -87,7 +87,7 @@ export default function Sidebar() {
                                             setPage(config.currentPage, "", {})
                                         setConfig("currentPage", item.href as PageName)
                                     }}
-                                    className={`flex w-full h-10 items-center p-2 rounded-md hover:bg-white/5 group gap-3 ${isActive ? "text-accent" : ""}`}
+                                    className={`flex w-full h-10 items-center p-2 rounded-md hover:bg-primary-text/5 group gap-3 ${isActive ? "text-accent" : ""}`}
                                 >
                                     <item.icon className="w-5 h-5 shrink-0 text-copy-light" />
                                     {isExpanded && <span className="whitespace-nowrap">{item.name}</span>}
@@ -101,7 +101,7 @@ export default function Sidebar() {
                     <li className="pt-4 border-t border-white/10">
                         <button
                             onMouseUp={() => setConfig("currentPage", "settings")}
-                            className={`flex h-10 items-center p-2 rounded-md hover:bg-white/5 group gap-3 ${config.currentPage === "settings" ? "text-accent" : ""}`}
+                            className={`flex h-10 items-center p-2 rounded-md hover:bg-primary-text/5 group gap-3 ${config.currentPage === "settings" ? "text-accent" : ""}`}
                         >
                             <Cog6ToothIcon className="w-5 h-5 shrink-0 text-copy-light" />
                             {isExpanded && <span className="whitespace-nowrap">Settings</span>}

@@ -1,9 +1,9 @@
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import { useState, useEffect } from "react";
 import Book from "../components/shared/Book";
-import { Manga } from "../types/ExtensionData";
 import { useConfigStore } from "../stores/configStore";
 import { fixBook } from "../utils/fixBook";
+import { Manga } from "../types/Manga";
 
 export default function Library() {
     const [open, setOpen] = useState(false);
@@ -42,7 +42,7 @@ export default function Library() {
                 <div className="relative">
                     <div
                         onClick={() => setOpen(!open)}
-                        className="flex items-center gap-1 px-3 py-1 cursor-pointer hover:bg-white/5 rounded transition-colors"
+                        className="flex items-center gap-1 px-3 py-1 cursor-pointer hover:bg-primary-text/5 rounded transition-colors"
                     >
                         <span className="text-xs font-medium text-primary-text">{filter}</span>
                         <ChevronDownIcon

@@ -30,7 +30,6 @@ export default function ProgressBar({ page, total, onChange }: ProgressBarProps)
         return Math.round(pct * (total - 1)) + 1;
     }, [isDragging, dragVisualPct, hoverPct, page, total]);
 
-    const pagesLeft = Math.max(0, total - activePageNum);
 
     const handleUpdate = useCallback(
         (clientX: number) => {
@@ -99,10 +98,10 @@ export default function ProgressBar({ page, total, onChange }: ProgressBarProps)
                     }}
                     onMouseLeave={() => setHoverPct(null)}
                 >
-                    <div className="absolute w-full h-1 bg-neutral-800/50 rounded-full" />
+                    <div className="absolute w-full h-1 bg-background/60 rounded-full" />
 
                     <div
-                        className={`absolute h-1 bg-accent rounded-full pointer-events-none ${isDragging ? "" : "transition-[width] duration-300 ease-out"
+                        className={`absolute h-1 bg-accent rounded-full pointer-events-none ${isDragging ? "" : "transition-[width] ease-out duration-100"
                             }`}
                         style={{
                             width: `${displayPercentage}%`,
@@ -112,7 +111,7 @@ export default function ProgressBar({ page, total, onChange }: ProgressBarProps)
 
                     {(isDragging || hoverPct !== null) && (
                         <div
-                            className="absolute -top-7 z-50 pointer-events-none transition-opacity duration-200"
+                            className="absolute -top-7 z-50 pointer-events-none transition-opacity duration-100"
                             style={{
                                 left: isRTL
                                     ? `${100 - (isDragging ? displayPercentage : hoverPct! * 100)}%`
@@ -120,41 +119,24 @@ export default function ProgressBar({ page, total, onChange }: ProgressBarProps)
                                 transform: 'translateX(-50%)'
                             }}
                         >
-                            <div className="bg-neutral-900 text-white text-[10px] font-bold px-2 py-1 rounded border border-neutral-700 shadow-xl animate-in fade-in zoom-in duration-150">
+                            <div className="bg-surface text-primary-text text-[10px] font-bold px-2 py-1 rounded border border-primary-text/30">
                                 {activePageNum}
                             </div>
                         </div>
                     )}
 
                     <div
-                        className={`absolute w-3 h-3 bg-white rounded-full shadow-md pointer-events-none transform -translate-x-1/2 ${isDragging ? "scale-125" : "scale-100 group-hover:scale-110"
+                        className={`absolute w-3 h-3 bg-white rounded-full shadow-md pointer-events-none ${isDragging ? "scale-125" : "scale-100 group-hover:scale-110 duration-100"
                             }`}
                         style={{
-                            left: isRTL ? `${100 - displayPercentage}%` : `${displayPercentage}%`,
-                            transition: isDragging ? 'none' : 'left 0.3s ease-out, transform 0.2s'
+                            [isRTL ? 'right' : 'left']: `${displayPercentage}%`,
+                            transform: isRTL ? 'translateX(50%)' : 'translateX(-50%)'
                         }}
                     />
                 </div>
             </div>
 
-            <div className="flex justify-between items-center text-[11px] font-medium tracking-tight text-primary-text/40 px-1">
-                <div>
-                    <span className="text-primary-text/80">{activePageNum}</span>
-                    <span className="mx-1">of</span>
-                    <span>{total} pages</span>
-                </div>
 
-                <div className="flex items-center gap-1">
-                    {pagesLeft === 0 ? (
-                        <span className="text-accent uppercase text-[9px] font-bold">Finished</span>
-                    ) : (
-                        <>
-                            <span className="text-primary-text/60">{pagesLeft}</span>
-                            <span>pages left</span>
-                        </>
-                    )}
-                </div>
-            </div>
         </div>
     );
 }

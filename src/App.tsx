@@ -8,7 +8,7 @@ import "./ExtensionHandler/SourceLoader"
 import { getSourceList, loadSource } from "./ExtensionHandler/SourceLoader";
 import { useEffect } from "react";
 import { corFetch } from "./coreFetch";
-import { SourceResponse } from "./types/ExtensionData";
+import { SourceResponse } from "./types/Extension";
 import { applyTheme, useConfigStore } from "./stores/configStore";
 
 function App() {

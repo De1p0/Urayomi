@@ -5,46 +5,16 @@ import {
      Square2StackIcon,
      StopIcon,
      XMarkIcon,
-     MagnifyingGlassIcon,
      ArrowLeftIcon
 } from '@heroicons/react/24/outline';
-import { useNavigate } from 'react-router-dom';
-import { Manga } from '../../types/ExtensionData';
 import { useConfigStore } from '../../stores/configStore';
 import Searchbar from './SearchBar';
 
 export default function TitleBar() {
      const [isMaximized, setIsMaximized] = useState(false);
      const appWindow = useMemo(() => getCurrentWindow(), []);
-     const [query, setQuery] = useState("");
      const { config, setPageRoute } = useConfigStore();
 
-     async function handleSearch() {
-          if (!query.trim()) return;
-
-          let results: Record<string, Manga[]> = {};
-          const { config, setSearch, setConfig, setPageRoute } = useConfigStore.getState();
-
-          for (const source of config.installedSources) {
-               const res = await source.search(query, 1, []);
-
-               if (res?.list) {
-                    const items = res.list.map(item => ({
-                         ...item,
-                         source: source.source.name,
-                         getDetail: source.getDetail.bind(source)
-                    }));
-
-
-                    results[source.source.name] = items;
-               }
-          }
-          setSearch(results, query);
-
-          setConfig("currentPage", "search");
-          setPageRoute("search", `/`);
-
-     }
 
      useEffect(() => {
           const syncState = async () => setIsMaximized(await appWindow.isMaximized());

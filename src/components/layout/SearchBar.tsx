@@ -1,11 +1,10 @@
 import { useState } from "react";
 import { useConfigStore } from "../../stores/configStore";
-import { Manga } from "../../types/ExtensionData";
 import { ArrowLeftIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
+import { Manga } from "../../types/Manga";
 
 export default function Searchbar({ layer = "background" }: { layer: string }) {
     const [query, setQuery] = useState("");
-    const { config, setPageRoute } = useConfigStore();
 
     async function handleSearch() {
         if (!query.trim()) return;
@@ -40,7 +39,7 @@ export default function Searchbar({ layer = "background" }: { layer: string }) {
         <div className={`w-full md:max-w-md`} >
             <div className="relative group w-full">
                 <div className="absolute inset-y-0 left-0 flex items-center pl-2 pointer-events-none">
-                    <MagnifyingGlassIcon className="w-3.5 h-3.5 text-gray-500 group-focus-within:text-accent/50 transition-colors" onClick={() => handleSearch()} />
+                    <MagnifyingGlassIcon className="w-3.5 h-3.5 text-primary-text/80 group-focus-within:text-accent/50 transition-colors" onClick={() => handleSearch()} />
                 </div>
                 <input
                     type="text"
@@ -48,7 +47,7 @@ export default function Searchbar({ layer = "background" }: { layer: string }) {
                     onChange={(e) => setQuery(e.target.value)}
                     onKeyDown={(e) => { if (e.key === "Enter") handleSearch(); }}
                     placeholder="Search manga..."
-                    className="w-full bg-background border border-white/5 text-xs text-primary-text rounded py-1 pl-7 pr-2 focus:outline-none focus:bg-background/90 focus:border-accent/90 transition-all"
+                    className="w-full bg-background border border-primary-text/5 text-xs text-primary-text rounded py-1 pl-7 pr-2 focus:outline-none focus:bg-background/90 focus:border-accent/90 transition-all"
                 />
             </div>
         </div >

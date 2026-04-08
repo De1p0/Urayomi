@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
-import { Manga } from "../../types/ExtensionData";
 import { useConfigStore } from "../../stores/configStore";
+import { Manga } from "../../types/Manga";
 
 export default function Book({ book }: { book: Manga }) {
     const { config, setPage } = useConfigStore()

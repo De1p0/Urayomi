@@ -4,7 +4,7 @@ import { useConfigStore } from "../../stores/configStore";
 import { fixBook } from "../../utils/fixBook";
 import { MangaManager } from "../../utils/MangaManager";
 import { getB64 } from "../../utils/common";
-import { MangaDetail } from "../../types/ExtensionData";
+import { MangaDetail } from "../../types/Manga";
 
 export default function BookDetailsPage() {
     const { config, setPageRoute, setPage } = useConfigStore();

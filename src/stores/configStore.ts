@@ -1,59 +1,13 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { DefaultExtension, SourceResponse, Manga } from '../types/ExtensionData';
 import { ThemeName, THEMES } from './themes/themes';
 import { platform } from '@tauri-apps/plugin-os';
+import { AppConfig, ConfigStore } from '../types/Config';
 
 const current_platform: string = platform()
 const isMobile = current_platform === "ios" || current_platform === "android";
 
-export interface AppConfig {
-    layout: {
-        doublePanel: boolean;
-        rightToLeft: boolean;
-    };
-    theme: ThemeName;
-    sources: SourceResponse[];
-    sourceList: string;
-    installedSourcesName: SourceResponse[];
-    installedSources: DefaultExtension[];
-    currentPage: PageName;
-    isMobile: boolean;
-    pageRoutes: {
-        library: {
-            route: string;
-            state: any
-        };
-        search: {
-            route: string;
-            state: any
-        };
-        browse: {
-            route: string;
-            state: any
-        };
-        settings: {
-            route: string;
-            state: any
-        };
-    };
-    searchResults: { [key: string]: Manga[] };
-    searchQuery: string;
-}
 
-interface ConfigStore {
-    config: AppConfig;
-    setConfig: <K extends keyof AppConfig>(key: K, value: AppConfig[K]) => void;
-    setLayoutKey: <K extends keyof AppConfig['layout']>(
-        key: K,
-        value: AppConfig['layout'][K]
-    ) => void;
-    setPageRoute: (page: keyof AppConfig['pageRoutes'], path: string) => void;
-    setSearch: (results: { [key: string]: Manga[] }, query: string) => void;
-    setPageState: (page: keyof AppConfig['pageRoutes'], state: any) => void;
-    setPage: (page: keyof AppConfig['pageRoutes'], path: string, state: any) => void;
-    clearSearch: () => void;
-}
 export const useConfigStore = create<ConfigStore>()(
     persist(
         (set) => ({

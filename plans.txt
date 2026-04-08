@@ -1,13 +1,13 @@
 High priority --
 
-Implement a complete source system - Likely aidoku or mangayomi sources
+Implement a complete source system - Likely aidoku or mangayomi sources (THIS SHIT IS FUCKED UP I AM NOT GONNA FINISH PLS)
 Allow saving manga
-Implementing an actual reader
+Implementing an actual reader ✅
 More settings 
 Catagories
 
 Low priority --
 
-Implement a theming system
+Implement a theming system ✅
 Downloading manga
 Importing local manga

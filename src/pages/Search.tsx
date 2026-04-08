@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import { Manga } from "../types/ExtensionData";
 import Book from "../components/shared/Book";
 import { useConfigStore } from "../stores/configStore";
 import Searchbar from "../components/layout/SearchBar";
+import { Manga } from "../types/Manga";
 
 export default function Search() {
     const location = useLocation();
@@ -59,7 +59,7 @@ export default function Search() {
                                     {source}
                                 </h2>
                                 <div className="h-px w-full bg-white/10" />
-                                <span className="text-sm text-primary-text/70 font-medium px-2 py-1 bg-white/5 rounded">
+                                <span className="text-sm text-primary-text/70 font-medium px-2 py-1 bg-primary-text/5 rounded">
                                     {results.length}
                                 </span>
                             </div>
