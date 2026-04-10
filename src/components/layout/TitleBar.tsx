@@ -13,8 +13,7 @@ import Searchbar from './SearchBar';
 export default function TitleBar() {
      const [isMaximized, setIsMaximized] = useState(false);
      const appWindow = useMemo(() => getCurrentWindow(), []);
-     const { config, setPageRoute } = useConfigStore();
-
+     const { config, updateConfig } = useConfigStore();
 
      useEffect(() => {
           const syncState = async () => setIsMaximized(await appWindow.isMaximized());
@@ -40,18 +39,21 @@ export default function TitleBar() {
                          <span className="text-[10px] font-black tracking-[0.2em] uppercase text-primary-text">Urayomi</span>
                     </div>
                </div>
+
                <div className='h-full'>
                     <button
-                         onClick={() => setPageRoute(config.currentPage, "/")}>
+                         onClick={() => {
+                              updateConfig((config) => {
+                                   config.pageRoutes[config.currentPage].route = "/";
+                              });
+                         }}
+                    >
                          <ArrowLeftIcon width={16} />
                     </button>
-
                </div>
-
 
                <div className="flex-1 flex"></div>
                <Searchbar layer="surface" />
-
                <div className="flex-1 flex"></div>
 
                <div className="flex h-full">

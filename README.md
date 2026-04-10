@@ -5,6 +5,8 @@
   <img src="showcase/page.png" alt="Showcase Page" width="45%">
   <img src="showcase/reading.png" alt="Reading Mode" width="45%">
 </div>
+## Supporting 
+
 
 ## Available Platforms
 
@@ -21,6 +23,10 @@ Versions below **v0.5.4** may have unexpected **(theyre very expected)** bugs, l
 
 ## Sources
 extensions are available here: [Urayomi-Extensions GitHub](https://github.com/De1p0/Urayomi-Extensions)  
+
+## Contributing
+Yes I know the code is messy, I'm planning to refactor everything in newer updates, if you would like to add contribute please join the discord  
+
 
 ## Credits
 This project was inspired by:  

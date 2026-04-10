@@ -1,16 +1,17 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import { immer } from 'zustand/middleware/immer';
+
 import { ThemeName, THEMES } from './themes/themes';
 import { platform } from '@tauri-apps/plugin-os';
 import { AppConfig, ConfigStore } from '../types/Config';
 
-const current_platform: string = platform()
+const current_platform: string = platform();
 const isMobile = current_platform === "ios" || current_platform === "android";
-
 
 export const useConfigStore = create<ConfigStore>()(
     persist(
-        (set) => ({
+        immer((set) => ({
             config: {
                 layout: {
                     doublePanel: !isMobile,
@@ -22,19 +23,23 @@ export const useConfigStore = create<ConfigStore>()(
                 pageRoutes: {
                     library: {
                         route: "/",
-                        state: {}
+                        state: {},
+                        pageMangaState: {}
                     },
                     search: {
                         route: "/",
-                        state: {}
+                        state: {},
+                        pageMangaState: {}
                     },
                     browse: {
                         route: "/",
-                        state: {}
+                        state: {},
+                        pageMangaState: {}
                     },
                     settings: {
                         route: "/",
-                        state: {}
+                        state: {},
+                        pageMangaState: {}
                     },
                 },
                 sourceList: "",
@@ -44,85 +49,39 @@ export const useConfigStore = create<ConfigStore>()(
                 searchResults: {},
                 searchQuery: "",
             },
-            setLayoutKey: (key, value) => {
-                set((state) => ({
-                    config: {
-                        ...state.config,
-                        layout: {
-                            ...state.config.layout,
-                            [key]: value,
-                        },
-                    },
-                }));
-            },
-            setConfig: (key, value) => {
-                set((state) => ({
-                    config: { ...state.config, [key]: value },
-                }));
 
-                if (key === 'theme') {
-                    applyTheme(value as AppConfig['theme']);
-                }
+            updateConfig: (fn: (config: AppConfig) => void) => {
+                set((state) => {
+                    fn(state.config);
+                });
             },
-            setPageState: (page, stateValue) => {
-                set((state) => ({
-                    config: {
-                        ...state.config,
-                        pageRoutes: {
-                            ...state.config.pageRoutes,
-                            [page]: {
-                                ...state.config.pageRoutes[page],
-                                state: stateValue,
-                            },
-                        },
-                    },
-                }));
+
+            setTheme: (theme: ThemeName) => {
+                set((state) => {
+                    state.config.theme = theme;
+                });
+
+                applyTheme(theme);
             },
+
             setPage: (page, path, stateValue) => {
-                set((store) => ({
-                    config: {
-                        ...store.config,
-                        currentPage: page,
-                        pageRoutes: {
-                            ...store.config.pageRoutes,
-                            [page]: {
-                                ...store.config.pageRoutes[page],
-                                route: path,
-                                state: stateValue,
-                            },
-                        },
-                    },
-                }));
+                set((state) => {
+                    state.config.currentPage = page;
+                    state.config.pageRoutes[page].route = path;
+                    state.config.pageRoutes[page].state = stateValue;
+                });
             },
-            setPageRoute: (page, path) => {
-                set((state) => ({
-                    config: {
-                        ...state.config,
-                        pageRoutes: {
-                            ...state.config.pageRoutes,
-                            [page]: {
-                                ...state.config.pageRoutes[page],
-                                route: path,
-                            },
-                        },
-                    },
-                }));
-            },
-            setSearch: (results, query) => {
-                set((state) => ({
-                    config: { ...state.config, searchResults: results, searchQuery: query },
-                }));
-            },
+
             clearSearch: () => {
-                set((state) => ({
-                    config: { ...state.config, searchResults: {}, searchQuery: "" },
-                }));
+                set((state) => {
+                    state.config.searchResults = {};
+                    state.config.searchQuery = "";
+                });
             },
-        }),
+        })),
         { name: 'urayomi-settings' }
     )
 );
-
 export function applyTheme(theme: ThemeName) {
     if (typeof window === "undefined") return;
 

@@ -1,44 +1,58 @@
 import { useState, useEffect } from "react";
 import ReactMarkdown from "react-markdown";
 import { useConfigStore } from "../../stores/configStore";
-import { fixBook } from "../../utils/fixBook";
-import { MangaManager } from "../../utils/MangaManager";
-import { getB64 } from "../../utils/common";
+import { fixBook, useFixBook } from "../../utils/fixBook";
 import { MangaDetail } from "../../types/Manga";
+import { useSourceRegistry } from "../../stores/SourceStore";
 
+
+// gotta fix why getting detail not wokring
 export default function BookDetailsPage() {
-    const { config, setPageRoute, setPage } = useConfigStore();
+    const { config, setPage, updateConfig } = useConfigStore();
+    const { sources } = useSourceRegistry();
     const [mangaDetail, setMangaDetail] = useState({} as MangaDetail);
     const [descriptionExp, setDescExp] = useState(false);
     const [genreExp, setGenreExp] = useState(false);
-    const [coverImg, setCoverImg] = useState("");
     const description = mangaDetail.description || "";
     const manga = config.pageRoutes[config.currentPage].state;
+    const fixBook = useFixBook();
 
     useEffect(() => {
         const getDetail = async () => {
-            if (!config.installedSources || config.installedSources.length === 0) return;
+            console.log(manga, Object.keys(sources).length);
+
 
             if (manga?.getDetail) {
                 const detail = await manga.getDetail(manga.link);
                 setMangaDetail(detail);
             } else {
-                const fixedBook = await fixBook(manga, config);
+                const fixedBook = await fixBook(manga);
+                console.log(fixedBook)
                 if (fixedBook.getDetail) {
                     const detail = await fixedBook.getDetail(fixedBook.link);
+                    console.log(detail, " detail")
                     setMangaDetail(detail);
                 } else {
                     setMangaDetail(fixedBook);
                 }
             }
 
-            if (manga?.imageUrl) {
-                setCoverImg(await getB64(manga.imageUrl));
-            }
-        };
 
+        };
         getDetail();
-    }, [manga, config.installedSources]);
+    }, [manga, sources]);
+
+    useEffect(() => {
+        updateConfig((config) => {
+
+
+            console.log(mangaDetail)
+            config.pageRoutes[config.currentPage].pageMangaState.chapterList = mangaDetail.chapters;
+            console.log(config.pageRoutes[config.currentPage].pageMangaState.chapterList, " Chapter list")
+
+            config.pageRoutes[config.currentPage].pageMangaState.manga = manga;
+        })
+    }, [mangaDetail])
 
     return (
         <div className="p-4 sm:p-8 w-full h-full text-primary-text overflow-y-auto">
@@ -118,19 +132,28 @@ export default function BookDetailsPage() {
                     <div className="mt-2">
                         <h2 className="text-xl sm:text-2xl font-bold mb-4">Chapters</h2>
                         <div className="grid grid-cols-1">
-                            {mangaDetail.chapters?.map((chapter, index) => (
+                            {config.pageRoutes[config.currentPage].pageMangaState.chapterList?.map((chapter, index) => (
                                 <div
                                     key={index}
                                     onClick={() => {
                                         setPage(config.currentPage, `/read/`, { chapter, manga })
+                                        updateConfig((config) => {
+                                            // config.pageRoutes[config.currentPage].pageMangaState.chapter.currentChapter = chapter;
+                                            const page = config.pageRoutes[config.currentPage];
+
+                                            if (page.pageMangaState.chapter) {
+                                                page.pageMangaState.chapter.currentPage = 0;
+                                                page.pageMangaState.manga = manga;
+                                                page.pageMangaState.chapter.currentChapter = chapter;
+
+
+                                            }
+                                        })
                                         console.log({ chapter, manga });
                                     }}
                                     className="group flex items-center justify-between py-4 px-2 sm:p-4 border-b border-primary-text/5 hover:bg-surface active:bg-surface transition-all cursor-pointer"
                                 >
                                     <span
-                                        onClick={() => {
-                                            console.log(manga?.getPageList(chapter.url));
-                                        }}
                                         className="font-medium text-primary-text/70 transition-all duration-200 flex flex-col gap-0.5"
                                     >
                                         <span className="text-sm sm:text-base">{chapter.name}</span>
@@ -159,6 +182,6 @@ export default function BookDetailsPage() {
                     </div>
                 </div>
             </div>
-        </div>
+        </div >
     );
 }

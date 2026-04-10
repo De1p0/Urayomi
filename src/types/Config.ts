@@ -1,7 +1,27 @@
 import { ThemeName } from "../stores/themes/themes";
 import { SourceResponse } from "./Api";
-import { DefaultExtension } from "./Extension";
-import { Manga } from "./Manga";
+import { Chapter, Manga } from "./Manga";
+
+
+export interface PageMangaChapterState {
+    currentChapter?: Chapter;
+    currentPage?: number;
+    pageList?: string[]
+    pages?: number;
+}
+
+export interface pageMangaState {
+    manga?: Manga;
+    chapterList?: Chapter[];
+    currentPage?: number;
+    chapter?: PageMangaChapterState;
+}
+
+export interface pageConfig {
+    route: string;
+    state: any;
+    pageMangaState: pageMangaState
+};
 
 export interface AppConfig {
     layout: {
@@ -12,26 +32,13 @@ export interface AppConfig {
     sources: SourceResponse[];
     sourceList: string;
     installedSourcesName: SourceResponse[];
-    installedSources: DefaultExtension[];
     currentPage: PageName;
     isMobile: boolean;
     pageRoutes: {
-        library: {
-            route: string;
-            state: any
-        };
-        search: {
-            route: string;
-            state: any
-        };
-        browse: {
-            route: string;
-            state: any
-        };
-        settings: {
-            route: string;
-            state: any
-        };
+        library: pageConfig,
+        search: pageConfig,
+        browse: pageConfig,
+        settings: pageConfig,
     };
     searchResults: { [key: string]: Manga[] };
     searchQuery: string;
@@ -39,14 +46,14 @@ export interface AppConfig {
 
 export interface ConfigStore {
     config: AppConfig;
-    setConfig: <K extends keyof AppConfig>(key: K, value: AppConfig[K]) => void;
-    setLayoutKey: <K extends keyof AppConfig['layout']>(
-        key: K,
-        value: AppConfig['layout'][K]
+
+    updateConfig: (fn: (config: AppConfig) => void) => void;
+
+    setTheme: (theme: ThemeName) => void;
+    setPage: (
+        page: keyof AppConfig['pageRoutes'],
+        path: string,
+        state: any
     ) => void;
-    setPageRoute: (page: keyof AppConfig['pageRoutes'], path: string) => void;
-    setSearch: (results: { [key: string]: Manga[] }, query: string) => void;
-    setPageState: (page: keyof AppConfig['pageRoutes'], state: any) => void;
-    setPage: (page: keyof AppConfig['pageRoutes'], path: string, state: any) => void;
     clearSearch: () => void;
 }

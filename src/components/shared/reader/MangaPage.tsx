@@ -16,7 +16,7 @@ export function MangaPage({
     if (!src) {
         return (
             <div
-                className={`max-h-full ${sizeClass} flex items-center justify-center rounded-lg bg-neutral-900 select-none`}
+                className={`max-h-full ${sizeClass} flex items-center justify-center rounded-lg bg-surface/90 select-none`}
             >
                 {fallback}
             </div>

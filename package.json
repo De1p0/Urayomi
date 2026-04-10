@@ -19,6 +19,7 @@
     "@tauri-apps/plugin-os": "^2.3.2",
     "@types/dompurify": "^3.2.0",
     "dompurify": "^3.3.2",
+    "immer": "^11.1.4",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-markdown": "^10.1.0",

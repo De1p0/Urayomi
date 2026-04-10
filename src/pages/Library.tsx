@@ -2,14 +2,17 @@ import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import { useState, useEffect } from "react";
 import Book from "../components/shared/Book";
 import { useConfigStore } from "../stores/configStore";
-import { fixBook } from "../utils/fixBook";
+import { useFixBook } from "../utils/fixBook";
 import { Manga } from "../types/Manga";
+import { useSourceRegistry } from "../stores/SourceStore";
 
 export default function Library() {
     const [open, setOpen] = useState(false);
     const [filter, setFilter] = useState("All");
     const [books, setBooks] = useState<Manga[]>([]);
     const { config } = useConfigStore();
+    const { sources } = useSourceRegistry();
+    const fixBook = useFixBook();
 
     const library = [
         {
@@ -25,7 +28,7 @@ export default function Library() {
             const bookDetails = await Promise.all(
                 library.map(async (book) => {
                     console.log(book)
-                    return await fixBook(book, config);
+                    return await fixBook(book);
                 })
             ) as Manga[];
 
@@ -33,7 +36,7 @@ export default function Library() {
         }
 
         fetchBooks();
-    }, [config.installedSources]);
+    }, [sources]);
 
     return (
         <div className="w-full h-full p-8">

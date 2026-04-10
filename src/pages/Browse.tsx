@@ -1,12 +1,13 @@
+import { useEffect } from "react";
 import { loadSource } from "../ExtensionHandler/SourceLoader";
-import { DefaultExtension } from '../types/Extension';
 import { corFetch } from "../coreFetch";
-import ExtensionsSettings from '../components/settings/ExtensionSettings';
 import { useConfigStore } from "../stores/configStore";
 import { SourceResponse } from "../types/Api";
+import { useSourceRegistry } from "../stores/SourceStore";
 
 export default function Browse() {
-    const { config, setConfig } = useConfigStore();
+    const { config, updateConfig } = useConfigStore();
+    const { sources, setSource, removeSource } = useSourceRegistry();
 
     const handleInstall = async (sourceItem: SourceResponse) => {
         const currentInstalled = config?.installedSourcesName ?? [];
@@ -17,18 +18,33 @@ export default function Browse() {
             ? currentInstalled.filter(source => source.id != sourceItem.id)
             : [...currentInstalled, sourceItem];
 
-        setConfig("installedSourcesName", updatedInstalled);
+        updateConfig((config) => {
+            config.installedSourcesName = updatedInstalled;
+        })
 
-        const extensions = await Promise.all(
-            updatedInstalled.map(async (source: SourceResponse) => {
+        for (const source of updatedInstalled) {
+            try {
                 const ExtensionClass = await loadSource(source.script);
-                let extension = new ExtensionClass(corFetch);
-                return extension;
-            })
-        );
+                const extension = new ExtensionClass(corFetch);
+                setSource(source.id, extension);
+            } catch (error) {
+                console.error(`Failed to load source ${source.id}:`, error);
+                removeSource(source.id);
+            }
+        }
 
-        setConfig("installedSources", extensions);
+        for (const sourceId of Object.keys(sources)) {
+            if (!updatedInstalled.some(s => s.id === sourceId)) {
+                removeSource(sourceId);
+            }
+        }
+
+        console.log("Installing source", sourceItem)
     };
+
+    useEffect(() => {
+        console.log("REGISTRY UPDATE:", sources);
+    }, [sources]);
 
     return (
         <div className="w-full h-full p-4 sm:p-8 overflow-hidden">

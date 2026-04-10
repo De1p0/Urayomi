@@ -8,12 +8,12 @@ import "./ExtensionHandler/SourceLoader"
 import { getSourceList, loadSource } from "./ExtensionHandler/SourceLoader";
 import { useEffect } from "react";
 import { corFetch } from "./coreFetch";
-import { SourceResponse } from "./types/Extension";
 import { applyTheme, useConfigStore } from "./stores/configStore";
+import { useSourceRegistry } from "./stores/SourceStore";
 
 function App() {
-  const { config, setConfig } = useConfigStore();
-
+  const { config, updateConfig } = useConfigStore();
+  const { setSource } = useSourceRegistry();
   useEffect(() => {
     // setConfig("isMobile", false); // this is for debug only, please remove on official release
 
@@ -27,7 +27,12 @@ function App() {
         })
       );
 
-      setConfig("installedSources", extensions);
+      extensions.forEach(source => {
+        setSource(source.source.name, source)
+        console.log(source, "Shit");
+      })
+
+
     };
 
     handleExtensionLoad();

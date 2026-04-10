@@ -1,7 +1,6 @@
 import { useRef, useState } from "react";
 import {
     BookmarkIcon,
-    ClockIcon,
     MagnifyingGlassIcon,
     Cog6ToothIcon,
     Bars3Icon,
@@ -12,14 +11,14 @@ import { useConfigStore } from "../../stores/configStore";
 const MENU_ITEMS = [
     { name: "Library", icon: BookmarkIcon, href: "library" },
     { name: "Browse", icon: GlobeAltIcon, href: "browse" },
-    // { name: "History", icon: ClockIcon, href: "history" }, // history is boribngg who even uses this
     { name: "Search", icon: MagnifyingGlassIcon, href: "search" },
 ];
 
 export default function Sidebar() {
     const [isExpanded, setIsExpanded] = useState(false);
     const sidebarRef = useRef<HTMLElement>(null);
-    const { config, setConfig, setPage } = useConfigStore();
+
+    const { config, updateConfig } = useConfigStore();
 
     if (config.isMobile) {
         return (
@@ -29,20 +28,36 @@ export default function Sidebar() {
             >
                 {MENU_ITEMS.map((item) => {
                     const isActive = config.currentPage === item.href;
+
                     return (
                         <button
                             key={item.name}
-                            onMouseUp={() => setConfig("currentPage", item.href as PageName)}
-                            className={`flex flex-col items-center justify-center gap-0.5 w-12 h-14 rounded-md ${isActive ? "text-accent" : "text-copy-light"}`}
+                            onClick={() =>
+                                updateConfig((config) => {
+                                    config.currentPage = item.href as PageName;
+                                })
+                            }
+                            className={`flex flex-col items-center justify-center gap-0.5 w-12 h-14 rounded-md ${isActive ? "text-accent" : "text-copy-light"
+                                }`}
                         >
                             <item.icon className="w-5 h-5 shrink-0" />
-                            <span className="text-[10px] whitespace-nowrap">{item.name}</span>
+                            <span className="text-[10px] whitespace-nowrap">
+                                {item.name}
+                            </span>
                         </button>
                     );
                 })}
+
                 <button
-                    onMouseUp={() => setConfig("currentPage", "settings")}
-                    className={`flex flex-col items-center justify-center gap-0.5 w-12 h-14 rounded-md ${config.currentPage === "settings" ? "text-accent" : "text-copy-light"}`}
+                    onClick={() =>
+                        updateConfig((config) => {
+                            config.currentPage = "settings";
+                        })
+                    }
+                    className={`flex flex-col items-center justify-center gap-0.5 w-12 h-14 rounded-md ${config.currentPage === "settings"
+                        ? "text-accent"
+                        : "text-copy-light"
+                        }`}
                 >
                     <Cog6ToothIcon className="w-5 h-5 shrink-0" />
                     <span className="text-[10px]">Settings</span>
@@ -68,7 +83,7 @@ export default function Sidebar() {
                     <li className="border-b pb-2 border-primary-text/10">
                         <button
                             type="button"
-                            onMouseUp={() => setIsExpanded(!isExpanded)}
+                            onClick={() => setIsExpanded(!isExpanded)}
                             className="flex h-10 items-center p-2 rounded-md hover:bg-primary-text/5 group gap-3"
                             aria-label="Toggle Sidebar"
                         >
@@ -78,33 +93,54 @@ export default function Sidebar() {
 
                     {MENU_ITEMS.map((item) => {
                         const isActive = config.currentPage === item.href;
+
                         return (
                             <li key={item.name}>
                                 <button
-                                    onMouseUp={() => {
-                                        // if its already selected we go back to home page + (IMPROVES UX)
-                                        if (isActive)
-                                            setPage(config.currentPage, "", {})
-                                        setConfig("currentPage", item.href as PageName)
+                                    onClick={() => {
+                                        updateConfig((config) => {
+                                            if (config.currentPage === item.href) {
+                                                config.pageRoutes[config.currentPage].route = "";
+                                                config.pageRoutes[config.currentPage].state = {};
+                                            }
+
+                                            config.currentPage = item.href as PageName;
+                                        });
                                     }}
-                                    className={`flex w-full h-10 items-center p-2 rounded-md hover:bg-primary-text/5 group gap-3 ${isActive ? "text-accent" : ""}`}
+                                    className={`flex w-full h-10 items-center p-2 rounded-md hover:bg-primary-text/5 group gap-3 ${isActive ? "text-accent" : ""
+                                        }`}
                                 >
                                     <item.icon className="w-5 h-5 shrink-0 text-copy-light" />
-                                    {isExpanded && <span className="whitespace-nowrap">{item.name}</span>}
+                                    {isExpanded && (
+                                        <span className="whitespace-nowrap">
+                                            {item.name}
+                                        </span>
+                                    )}
                                 </button>
                             </li>
                         );
                     })}
 
-                    <div className="flex-1" aria-hidden="true"></div>
+                    <div className="flex-1" />
 
                     <li className="pt-4 border-t border-white/10">
                         <button
-                            onMouseUp={() => setConfig("currentPage", "settings")}
-                            className={`flex h-10 items-center p-2 rounded-md hover:bg-primary-text/5 group gap-3 ${config.currentPage === "settings" ? "text-accent" : ""}`}
+                            onClick={() =>
+                                updateConfig((config) => {
+                                    config.currentPage = "settings";
+                                })
+                            }
+                            className={`flex h-10 items-center p-2 rounded-md hover:bg-primary-text/5 group gap-3 ${config.currentPage === "settings"
+                                ? "text-accent"
+                                : ""
+                                }`}
                         >
                             <Cog6ToothIcon className="w-5 h-5 shrink-0 text-copy-light" />
-                            {isExpanded && <span className="whitespace-nowrap">Settings</span>}
+                            {isExpanded && (
+                                <span className="whitespace-nowrap">
+                                    Settings
+                                </span>
+                            )}
                         </button>
                     </li>
                 </ul>

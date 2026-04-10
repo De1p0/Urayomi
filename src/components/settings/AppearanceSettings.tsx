@@ -1,12 +1,11 @@
-import { useState } from "react";
-import { EyeIcon, ChevronDownIcon, CheckIcon } from "@heroicons/react/24/outline";
+import { EyeIcon } from "@heroicons/react/24/outline";
 import ToggleButton from "../shared/ToggleButton";
 import SelectDropDown from "../shared/SelectDropdown";
 import { THEME_NAMES } from "../../stores/themes/themes";
 import { useConfigStore } from "../../stores/configStore";
 
 export default function AppearanceSettings() {
-    const { config, setConfig, setLayoutKey } = useConfigStore();
+    const { config, updateConfig } = useConfigStore();
 
     return (
         <div className="p-4 bg-surface border border-primary-text/10 rounded relative">
@@ -22,19 +21,34 @@ export default function AppearanceSettings() {
                     label="Theme"
                     value={config.theme}
                     options={THEME_NAMES}
-                    onChange={(val) => setConfig("theme", val)}
+                    onChange={(val) =>
+                        updateConfig((config) => {
+                            config.theme = val;
+                        })
+                    }
                 />
-                {/* <ToggleButton /> */}
 
-                <ToggleButton label="Double Panel" description="Two panels instead of one per page" onChange={(val) => {
-                    setLayoutKey("doublePanel", val);
-                    console.log(config.layout)
-                }} checked={config.layout.doublePanel} />
+                <ToggleButton
+                    label="Double Panel"
+                    description="Two panels instead of one per page"
+                    checked={config.layout.doublePanel}
+                    onChange={(val) =>
+                        updateConfig((config) => {
+                            config.layout.doublePanel = val;
+                        })
+                    }
+                />
 
-                <ToggleButton label="Right To Left" description="Show manga panels in a RTL layout" onChange={(val) => {
-                    setLayoutKey("rightToLeft", val);
-                    console.log(config.layout)
-                }} checked={config.layout.rightToLeft} />
+                <ToggleButton
+                    label="Right To Left"
+                    description="Show manga panels in a RTL layout"
+                    checked={config.layout.rightToLeft}
+                    onChange={(val) =>
+                        updateConfig((config) => {
+                            config.layout.rightToLeft = val;
+                        })
+                    }
+                />
 
             </div>
         </div>
