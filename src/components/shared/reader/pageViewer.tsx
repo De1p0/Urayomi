@@ -197,16 +197,6 @@ export default function PageViewer() {
             </div>
 
             <div className="bg-surface px-4">
-                <div className="flex justify-between items-center text-sm text-primary-text/80 pb-2">
-                    <div>
-                        Chapter: {state?.chapter?.currentChapter?.name ?? "—"}
-                    </div>
-                    <div>
-                        Page {pages.length ? Math.min(page + 1, pages.length) : 0} /{" "}
-                        {pages.length}
-                    </div>
-                </div>
-
                 <ProgressBar
                     page={page === -1 ? 0 : page}
                     total={pages.length}
