@@ -6,6 +6,9 @@
     <img src="https://img.shields.io/badge/discord-join%20server-5865F2?style=for-the-badge&logo=discord" />
   </a>
 </p>
+
+
+
 # Urayomi
 **Urayomi** is an open-source manga reader that supports every device, from desktop to mobile.  
 ## Showcase
@@ -13,7 +16,10 @@
   <img src="showcase/page.png" alt="Showcase Page" width="45%">
   <img src="showcase/reading.png" alt="Reading Mode" width="45%">
 </div>
+
 ## Supporting 
+
+*Please support this project by giving it a star*
 
 
 ## Available Platforms
