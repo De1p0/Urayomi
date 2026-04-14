@@ -23,10 +23,10 @@
 
 ## Features
 
-- Cross-platform support (desktop + mobile)
-- Extension-based content system
-- Customizable reading experience
-- Lightweight and fast UI
+- [x] Cross-platform support (desktop + mobile)
+- [x] Extension-based content system
+- [x] Customizable reading experience
+- [x] Lightweight and fast UI
 <!-- - Sync-ready architecture (future-proofed) -->
 <!-- - Offline reading support -->
 
