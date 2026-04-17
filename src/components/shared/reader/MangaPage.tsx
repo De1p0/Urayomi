@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+
 interface MangaPageProps {
     src?: string | null;
     alt?: string;
@@ -11,25 +13,40 @@ export function MangaPage({
     fallback,
     half = false,
 }: MangaPageProps) {
+    const [loading, setLoading] = useState(true);
     const sizeClass = half ? "max-w-1/2" : "max-w-full";
+
+    useEffect(() => {
+        if (src) setLoading(true);
+    }, [src]);
 
     if (!src) {
         return (
-            <div
-                className={`max-h-full ${sizeClass} flex items-center justify-center rounded-lg bg-surface/90 select-none`}
-            >
+            <div className={`max-h-full ${sizeClass} flex items-center justify-center`}>
                 {fallback}
             </div>
         );
     }
 
     return (
-        <img
-            src={src}
-            alt={alt}
-            className={`max-h-full ${sizeClass} object-contain rounded-lg drop-shadow-2xl select-none pointer-events-none`}
-            draggable={false}
-            onDragStart={(e) => e.preventDefault()}
-        />
+        <div className="relative max-h-full flex items-center justify-center">
+            {loading && (
+                <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="spinner" />
+                </div>
+            )}
+
+            <img
+                src={src}
+                alt={alt}
+                loading="lazy"
+                className={`max-h-[80vh] ${sizeClass} w-auto object-contain rounded-lg drop-shadow-2xl select-none pointer-events-none transition-opacity duration-500 ${loading ? "opacity-0" : "opacity-100"
+                    }`}
+                draggable={false}
+                onDragStart={(e) => e.preventDefault()}
+                onLoad={() => setLoading(false)}
+                onError={() => setLoading(false)}
+            />
+        </div>
     );
 }
