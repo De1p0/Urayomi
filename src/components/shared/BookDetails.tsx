@@ -42,7 +42,7 @@ export default function BookDetailsPage() {
     useEffect(() => {
         updateConfig((config) => {
             config.pageRoutes[config.currentPage].pageMangaState.chapterList = mangaDetail.chapters;
-            console.log(config.pageRoutes[config.currentPage].pageMangaState.chapterList, " Chapter list");
+            console.log(mangaDetail)
             config.pageRoutes[config.currentPage].pageMangaState.manga = manga;
         })
     }, [mangaDetail])

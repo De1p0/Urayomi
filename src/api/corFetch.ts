@@ -14,7 +14,7 @@ function encodeUrl(url: string) {
 
 export const corFetch = (url: string, init: any = {}) => {
     const encodedUrl = encodeUrl(url);
-
+    console.log(url)
     return fetch(encodedUrl, {
         ...init,
         headers: {

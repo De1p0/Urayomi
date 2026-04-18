@@ -6,6 +6,8 @@ Implementing an actual reader ✅
 More settings
 Catagories
 Smoothing out the code so scaling is easier
+Light Novel Support
+
 
 Low priority --
 

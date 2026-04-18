@@ -40,8 +40,9 @@ export function MangaPage({
                 src={src}
                 alt={alt}
                 loading="lazy"
-                className={`max-h-[80vh] ${sizeClass} w-auto object-contain rounded-lg drop-shadow-2xl select-none pointer-events-none transition-opacity duration-500 ${loading ? "opacity-0" : "opacity-100"
+                className={`max-h-[85vh] ${sizeClass} w-auto object-contain rounded-lg drop-shadow-2xl select-none pointer-events-none transition-opacity duration-200 ${loading ? "opacity-0" : "opacity-100"
                     }`}
+
                 draggable={false}
                 onDragStart={(e) => e.preventDefault()}
                 onLoad={() => setLoading(false)}

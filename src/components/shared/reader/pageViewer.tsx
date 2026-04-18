@@ -22,7 +22,6 @@ export default function PageViewer() {
         pages.length > 0 && page > -2 && pagesLoaded;
 
     const setPage = (newPage: number) => {
-        if (!isLoaded) return;
 
         updateConfig((config) => {
             config.pageRoutes[config.currentPage].pageMangaState.currentPage = newPage;
@@ -81,6 +80,7 @@ export default function PageViewer() {
             console.log(index, chapterList.length, pageState.currentPage)
 
         });
+
     }
 
 
@@ -89,7 +89,6 @@ export default function PageViewer() {
 
         if (!chapter || !manga) return;
 
-        setPagesLoaded(false);
 
         const getPages = async () => {
             if (manga.source == "Local") {
@@ -162,7 +161,6 @@ export default function PageViewer() {
     }, [chapter?.url, manga, sources, updateConfig, page]);
 
     const handleNextPage = useCallback(() => {
-        if (!isLoaded) return;
 
         const chapterList = state?.chapterList;
         if (!chapterList?.length || !chapter) return;
@@ -174,10 +172,9 @@ export default function PageViewer() {
 
         updatePage(index, true)
 
-    }, [isLoaded, state, page, pages.length, config.layout.doublePanel, updateConfig]);
+    }, [state, page, pages.length, config.layout.doublePanel, updateConfig]);
 
     const handlePrevPage = useCallback(() => {
-        if (!isLoaded) return;
 
         const chapterList = state?.chapterList;
         if (!chapterList?.length || !chapter) return;
@@ -189,7 +186,7 @@ export default function PageViewer() {
 
 
         updatePage(index, false)
-    }, [isLoaded, state, updateConfig, config.layout.doublePanel]);
+    }, [state, updateConfig, config.layout.doublePanel]);
 
     const isDouble = config.layout.doublePanel;
 
@@ -203,13 +200,10 @@ export default function PageViewer() {
 
             <div className="flex flex-1 bg-background overflow-auto">
                 <div
-
                     className={`flex flex-1 gap-2 ${config.layout.rightToLeft ? "flex-row-reverse" : ""
-                        } sm:gap-4 p-4 sm:p-8 items-center justify-center overflow-hidden bg-background rounded-bl-2xl ${isLoaded ? "cursor-pointer" : "pointer-events-none opacity-50"
+                        } sm:gap-4 p-4 sm:p-8 items-center justify-center overflow-hidden bg-background rounded-bl-2xl ${isLoaded ? "cursor-pointer" : "cursor-wait"
                         }`}
                     onClick={(e) => {
-                        if (!isLoaded) return;
-
                         const rect = e.currentTarget.getBoundingClientRect();
                         const isLeft =
                             e.clientX - rect.left < rect.width / 2;
@@ -288,7 +282,6 @@ export default function PageViewer() {
                     page={page === -2 ? 0 : page}
                     total={pages.length}
                     onChange={(p) => {
-                        if (!isLoaded) return;
                         setPage(p);
                     }}
                 />
