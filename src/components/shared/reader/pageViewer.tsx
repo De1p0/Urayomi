@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useMemo } from "react";
-import { useConfigStore } from "../../../stores/configStore";
+import { useConfigStore } from "../../../stores/ConfigStore";
 import { MangaPage } from "./MangaPage";
 import ProgressBar from "../ProgressBar";
 import { useSourceRegistry } from "../../../stores/SourceStore";

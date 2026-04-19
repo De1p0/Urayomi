@@ -1,5 +1,5 @@
 
-import { useConfigStore } from "../stores/configStore";
+import { useConfigStore } from "../stores/ConfigStore";
 import Searchbar from "../components/layout/SearchBar";
 
 // put components here and move to files later                   

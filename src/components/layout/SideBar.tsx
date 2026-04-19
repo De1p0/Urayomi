@@ -6,7 +6,7 @@ import {
     Bars3Icon,
     GlobeAltIcon
 } from "@heroicons/react/24/outline";
-import { useConfigStore } from "../../stores/configStore";
+import { useConfigStore } from "../../stores/ConfigStore";
 
 const MENU_ITEMS = [
     { name: "Library", icon: BookmarkIcon, href: "library" },

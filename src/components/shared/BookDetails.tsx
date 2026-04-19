@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
 import ReactMarkdown from "react-markdown";
-import { useConfigStore } from "../../stores/configStore";
+import { useConfigStore } from "../../stores/ConfigStore";
 import { fixBook, useFixBook } from "../../utils/fixBook";
 import { MangaDetail } from "../../types/Manga";
 import { useSourceRegistry } from "../../stores/SourceStore";
+import { BookmarkIcon } from "@heroicons/react/24/outline";
+import { useLibraryRegistry } from "../../stores/LibraryStore";
 
 
 export default function BookDetailsPage() {
@@ -15,7 +17,7 @@ export default function BookDetailsPage() {
     const description = mangaDetail.description || "";
     const manga = config.pageRoutes[config.currentPage].state;
     const fixBook = useFixBook();
-
+    const { library, hasBook, addBook } = useLibraryRegistry();
     useEffect(() => {
         const getDetail = async () => {
             console.log(manga, Object.keys(sources).length);
@@ -45,6 +47,7 @@ export default function BookDetailsPage() {
             console.log(mangaDetail)
             config.pageRoutes[config.currentPage].pageMangaState.manga = manga;
         })
+
     }, [mangaDetail])
 
     return (
@@ -53,12 +56,23 @@ export default function BookDetailsPage() {
             <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6 sm:gap-10">
 
 
-                <div className="shrink-0 sm:sticky sm:top-0">
+                <div className="shrink-0 sm:sticky sm:top-0 flex flex-col gap-5">
                     <img
                         src={manga?.imageUrl}
                         alt={manga?.name}
                         className="w-44 sm:w-72 object-cover aspect-2/3 rounded-xl"
                     />
+
+                    <button
+                        onClick={() => addBook(manga, hasBook(manga))}
+                        className={`w-full h-10 transition-all ${hasBook(manga) ? "bg-accent/80" : "bg-surface/80"} py-1.5 px-3 rounded-lg text-xs font-semibold text-primary-text/70 flex items-center justify-center`} >
+
+                        <div className="flex flex-row items-center justify-center gap-2 leading-none">
+                            <BookmarkIcon className="w-4 h-4" />
+                            <span>{hasBook(manga) ? "Remove from library" : "Add to library"}</span>
+                        </div>
+
+                    </button>
                 </div>
 
                 <div className="flex-1 min-w-0 w-full">

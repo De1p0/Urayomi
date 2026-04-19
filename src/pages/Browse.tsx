@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { loadSource } from "../core/Sources/SourceLoader";
 import { corFetch } from "../api/corFetch";
-import { useConfigStore } from "../stores/configStore";
+import { useConfigStore } from "../stores/ConfigStore";
 import { SourceResponse } from "../types/Api";
 import { useSourceRegistry } from "../stores/SourceStore";
 

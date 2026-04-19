@@ -4,7 +4,7 @@ import Browse from "../pages/Browse";
 import Library from "../pages/Library";
 import Search from "../pages/Search";
 import Settings from "../pages/Settings";
-import { useConfigStore } from "../stores/configStore";
+import { useConfigStore } from "../stores/ConfigStore";
 import PageViewer from "../components/shared/reader/pageViewer";
 
 const sharedRoutes = [

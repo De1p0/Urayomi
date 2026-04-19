@@ -50,4 +50,4 @@ export function MangaPage({
             />
         </div>
     );
-}
+}                          

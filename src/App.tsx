@@ -5,7 +5,7 @@ import TitleBar from "./components/layout/TitleBar";
 import Sidebar from "./components/layout/SideBar";
 import "./core/Sources/SourceLoader"
 import React, { useEffect } from "react";
-import { applyTheme, useConfigStore } from "./stores/configStore";
+import { applyTheme, useConfigStore } from "./stores/ConfigStore";
 import { corFetch } from "./api/corFetch";
 import { loadSource } from "./core/Sources/SourceLoader";
 import { useSourceRegistry } from "./stores/SourceStore";

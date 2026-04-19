@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
-import { useConfigStore } from "../../stores/configStore";
+import { useConfigStore } from "../../stores/ConfigStore";
 import { Manga } from "../../types/Manga";
 
 export default function Book({ book }: { book: Manga }) {

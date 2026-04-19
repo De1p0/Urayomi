@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import Book from "../components/shared/Book";
-import { useConfigStore } from "../stores/configStore";
+import { useConfigStore } from "../stores/ConfigStore";
 import Searchbar from "../components/layout/SearchBar";
 import { Manga } from "../types/Manga";
 

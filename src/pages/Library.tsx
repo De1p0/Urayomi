@@ -1,10 +1,11 @@
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import { useState, useEffect } from "react";
 import Book from "../components/shared/Book";
-import { useConfigStore } from "../stores/configStore";
+import { useConfigStore } from "../stores/ConfigStore";
 import { useFixBook } from "../utils/fixBook";
 import { LibraryManga, Manga } from "../types/Manga";
 import { useSourceRegistry } from "../stores/SourceStore";
+import { useLibraryRegistry } from "../stores/LibraryStore";
 
 export default function Library() {
     // const [open, setOpen] = useState(false);
@@ -12,34 +13,35 @@ export default function Library() {
     const [books, setBooks] = useState<Manga[]>([]);
     const { sources } = useSourceRegistry();
     const fixBook = useFixBook();
+    const { library, hasBook, addBook } = useLibraryRegistry();
 
-    const library: LibraryManga[] = [
-        {
-            name: "RuriDragon",
-            imageUrl: "https://uploads.mangadex.org/covers/141609b6-cf86-4266-904c-6648f389cdc9/216d1ce9-2195-4ad3-9502-be95b06a3502.jpg",
-            link: "/manga/141609b6-cf86-4266-904c-6648f389cdc9",
-            source: "MangaDex"
-        },
-        {
-            name: "Local Test",
-            imageUrl: "",
-            source: "Local",
-            chapters: [
-                {
-                    name: "part 2",
-                    url: "asd",
-                    scanlator: "hell",
-                    dateUpload: "123"
-                },
-                {
-                    name: "part 1",
-                    url: "asd",
-                    scanlator: "Depths",
-                    dateUpload: "123"
-                }
-            ]
-        }
-    ];
+    // const library: LibraryManga[] = [
+    //     {
+    //         name: "RuriDragon",
+    //         imageUrl: "https://uploads.mangadex.org/covers/141609b6-cf86-4266-904c-6648f389cdc9/216d1ce9-2195-4ad3-9502-be95b06a3502.jpg",
+    //         link: "/manga/141609b6-cf86-4266-904c-6648f389cdc9",
+    //         source: "MangaDex"
+    //     },
+    //     {
+    //         name: "Local Test",
+    //         imageUrl: "",
+    //         source: "Local",
+    //         chapters: [
+    //             {
+    //                 name: "part 2",
+    //                 url: "asd",
+    //                 scanlator: "hell",
+    //                 dateUpload: "123"
+    //             },
+    //             {
+    //                 name: "part 1",
+    //                 url: "asd",
+    //                 scanlator: "Depths",
+    //                 dateUpload: "123"
+    //             }
+    //         ]
+    //     }
+    // ];
 
 
 

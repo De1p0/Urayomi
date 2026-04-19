@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect, useCallback, useMemo } from "react";
-import { useConfigStore } from "../../stores/configStore";
+import { useConfigStore } from "../../stores/ConfigStore";
 
 interface ProgressBarProps {
     page: number;

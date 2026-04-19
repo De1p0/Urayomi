@@ -1,5 +1,5 @@
 import { PuzzlePieceIcon } from "@heroicons/react/24/outline";
-import { useConfigStore } from "../../stores/configStore";
+import { useConfigStore } from "../../stores/ConfigStore";
 import { getSourceList } from "../../core/Sources/SourceLoader";
 import { useEffect, useState } from "react";
 import { loadSource } from "../../core/Sources/SourceLoader";

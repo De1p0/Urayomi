@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useConfigStore } from "../../stores/configStore";
+import { useConfigStore } from "../../stores/ConfigStore";
 import { ArrowLeftIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { Manga } from "../../types/Manga";
 import { useSourceRegistry } from "../../stores/SourceStore";

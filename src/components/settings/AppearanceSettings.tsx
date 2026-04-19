@@ -2,7 +2,7 @@ import { EyeIcon } from "@heroicons/react/24/outline";
 import ToggleButton from "../shared/ToggleButton";
 import SelectDropDown from "../shared/SelectDropdown";
 import { THEME_NAMES } from "../../stores/themes/themes";
-import { useConfigStore } from "../../stores/configStore";
+import { useConfigStore } from "../../stores/ConfigStore";
 
 export default function AppearanceSettings() {
     const { config, updateConfig, setTheme } = useConfigStore();
