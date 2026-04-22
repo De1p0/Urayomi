@@ -123,12 +123,11 @@ export default function PageViewer() {
             }
 
 
-            const source = Object.values(sources).find(
-                (s) => s.source.name === manga.source
-            );
+            const source = sources[manga.source]
             if (!source) return;
 
             console.log(chapter)
+            console.log(source, "fdasufgaf");
 
             const pageList = await source.getPageList(chapter.url);
             setPages(pageList);
