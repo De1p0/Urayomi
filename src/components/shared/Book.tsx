@@ -14,7 +14,7 @@ export default function Book({ book }: { book: Manga }) {
             // config.pageRoutes[config.currentPage].state = book;
             setPage(config.currentPage, `/books/`, book)
         }}
-        className="group relative w-full max-w-50 aspect-2/3 rounded-xl overflow-hidden shadow-2xl transition-all hover:opacity-80"
+        className="group relative w-full max-w-50 aspect-2/3 transition-all hover:opacity-80"
     >
 
         {/* {book.maximumChapters - book.currentChapter > 0 && (
@@ -22,13 +22,19 @@ export default function Book({ book }: { book: Manga }) {
                 {book.maximumChapters - book.currentChapter}
             </span>
         )} */}
+        <div className="w-full flex justify-end absolute py-1 px-2">
+            <span className="px-2 py-1 text-[10px] tracking-wider font-bold text-white bg-accent backdrop-blur-md rounded-md z-10">
+                3
+            </span>
+        </div>
+
         < img
             src={book.imageUrl}
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover rounded-xl"
             alt={book.name}
         />
 
-        <div className="absolute inset-0 bg-linear-to-t from-black/90 via-black/20 to-transparent" />
+        <div className="absolute inset-0 rounded-xl overflow-hidden bg-linear-to-t from-black/90 via-black/40 to-transparent" />
 
         <span
             className={`absolute bottom-0 left-0 p-3 text-sm text-white font-semibold leading-tight drop-shadow-md wrap-break-words ${book?.name?.length > 30

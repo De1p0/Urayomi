@@ -17,7 +17,7 @@ export default function BookDetailsPage() {
     const description = mangaDetail.description || "";
     const manga = config.pageRoutes[config.currentPage].state;
     const fixBook = useFixBook();
-    const { library, hasBook, addBook } = useLibraryRegistry();
+    const { hasBook, addBook } = useLibraryRegistry();
     useEffect(() => {
         const getDetail = async () => {
             console.log(manga, Object.keys(sources).length);

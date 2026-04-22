@@ -50,49 +50,46 @@ export default function Search() {
                     Object.keys(searchResults).map((source) => {
                         const doExpand = expandedSources[source];
                         const results = searchResults[source] || [];
-                        const doWrap = results.length > 5;
+
 
                         return (
                             <section key={source} className="flex flex-col gap-4">
-                                <div className="flex items-center gap-4">
-                                    <h2 className="text-primary-text font-black text-xl whitespace-nowrap">
-                                        {source}
-                                    </h2>
-                                    <div className="h-px w-full bg-white/10" />
-                                    <span className="text-sm text-primary-text/70 font-medium px-2 py-1 bg-primary-text/5 rounded">
-                                        {results.length}
-                                    </span>
+                                <div className="flex items-center justify-between gap-4">
+                                    <div className="flex items-center gap-4 grow">
+                                        <h2 className="text-primary-text font-black text-xl whitespace-nowrap">
+                                            {source}
+                                        </h2>
+                                        <div className="h-px w-full bg-white/10" />
+                                        <span className="text-sm text-primary-text/70 font-medium px-2 py-1 bg-primary-text/5 rounded">
+                                            {results.length}
+                                        </span>
+                                    </div>
+
+
                                 </div>
 
-                                <div className="relative group">
+                                <div className="relative">
                                     <div
-                                        className={`relative flex flex-wrap gap-5 overflow-hidden transition-[max-height] duration-500 ease-in-out ${doExpand ? "max-h-none" : "max-h-85"
+                                        className={`flex flex-wrap gap-5 overflow-hidden transition-[max-height] duration-500 ease-in-out ${doExpand ? "max-h-[5000px]" : "max-h-[320px]"
                                             }`}
                                     >
                                         {results.map((book: Manga) => (
                                             <Book key={`${source}-${book.name}`} book={book} />
                                         ))}
-
-                                        {!doExpand && doWrap && (
-                                            <div className="absolute bottom-0 left-0 w-full h-20 bg-linear-to-t from-background via-background/80 to-transparent z-10 pointer-events-none" />
-                                        )}
                                     </div>
 
-                                    {doWrap && (
-                                        <div
-                                            className={`flex justify-center w-full mt-4 ${!doExpand ? "absolute -bottom-6 left-0 z-20" : ""
-                                                }`}
+
+                                    <div className="flex justify-end w-full mt-4">
+                                        <button
+                                            className="px-6 py-2 bg-surface hover:bg-surface-hover text-primary-text rounded-lg text-xs font-bold transition-all"
+                                            onClick={() => toggleExpand(source)}
                                         >
-                                            <button
-                                                className="px-8 py-2.5 bg-surface hover:bg-surface/80 text-primary-text rounded-xl text-sm font-bold transition-all"
-                                                onClick={() => toggleExpand(source)}
-                                            >
-                                                {doExpand
-                                                    ? "Show Less"
-                                                    : `Show All from ${source}`}
-                                            </button>
-                                        </div>
-                                    )}
+                                            {doExpand
+                                                ? "Show Less"
+                                                : `Show All from ${source}`}
+                                        </button>
+                                    </div>
+
                                 </div>
                             </section>
                         );
