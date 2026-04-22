@@ -60,7 +60,7 @@ export default function Library() {
         }
 
         fetchBooks();
-    }, [sources]);
+    }, [sources, library]);
 
     return (
         <div className="w-full h-full p-8">

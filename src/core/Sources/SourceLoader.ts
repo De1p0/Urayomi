@@ -1,3 +1,5 @@
+import { DefaultExtension } from "../../types/Extension";
+
 export function importSource(source: string) {
 
 }

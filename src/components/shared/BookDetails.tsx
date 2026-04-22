@@ -20,8 +20,7 @@ export default function BookDetailsPage() {
     const { hasBook, addBook } = useLibraryRegistry();
     useEffect(() => {
         const getDetail = async () => {
-            console.log(manga, Object.keys(sources).length);
-
+            console.log(sources, "source")
 
             if (manga?.getDetail) {
                 const detail = await manga.getDetail(manga.link);

@@ -9,6 +9,7 @@ import { applyTheme, useConfigStore } from "./stores/ConfigStore";
 import { corFetch } from "./api/corFetch";
 import { loadSource } from "./core/Sources/SourceLoader";
 import { useSourceRegistry } from "./stores/SourceStore";
+import { DefaultExtension } from "./types/Extension";
 const AppRoutes = React.lazy(() => import("./routes/AppRoutes"))
 function App() {
   const { config } = useConfigStore();
@@ -21,14 +22,15 @@ function App() {
     const handleExtensionLoad = async () => {
       const extensions = await Promise.all(
         config.sources.map(async (source) => {
+          console.log(source, " loaded source")
           const ExtensionClass = await loadSource(source.script);
-          return new ExtensionClass(corFetch);
+          return new ExtensionClass(corFetch) as DefaultExtension;
         })
       );
 
       extensions.forEach(source => {
         setSource(source.source.name, source)
-        console.log(source, "Shit");
+        console.log(source.getDetail, "Shit");
       })
     };
 

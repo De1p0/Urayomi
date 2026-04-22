@@ -1,18 +1,18 @@
 import { useSourceRegistry } from '../stores/SourceStore';
 
 export async function fixBook(book: any, sources: Record<string, any>) {
-    const bookSource = book.source?.toLowerCase();
+    const bookSource = book.source;
     if (!bookSource) return { ...book };
     if (bookSource == "Local") {
         return { ...book };
     }
 
     const source = sources[Object.keys(sources).find(
-        s => s.toLowerCase() === bookSource
+        s => s === bookSource
     ) || ""];
 
+    console.log(sources);
     if (!source) return { ...book };
-    console.log(book)
     return {
         ...book,
         source: source.source.name,

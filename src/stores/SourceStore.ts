@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { DefaultExtension } from "../types/Extension";
+import { persist } from "zustand/middleware";
 
 export interface Source {
     name: string;
@@ -12,23 +13,28 @@ interface SourceRegistryStore {
     removeSource: (key: string) => void;
 }
 
-export const useSourceRegistry = create<SourceRegistryStore>((set) => ({
-    sources: {
+export const useSourceRegistry = create<SourceRegistryStore>()(
+    persist(
+        (set) => ({
+            sources: {},
 
-    },
+            setSource: (key, source) =>
+                set((state) => ({
+                    sources: {
+                        ...state.sources,
+                        [key]: source,
+                    },
+                })),
 
-    setSource: (key, source) =>
-        set((state) => ({
-            sources: {
-                ...state.sources,
-                [key]: source
-            }
-        })),
-
-    removeSource: (key) =>
-        set((state) => {
-            const next = { ...state.sources };
-            delete next[key];
-            return { sources: next };
-        })
-}));
+            removeSource: (key) =>
+                set((state) => {
+                    const next = { ...state.sources };
+                    delete next[key];
+                    return { sources: next };
+                }),
+        }),
+        {
+            name: "source-storage",
+        }
+    )
+);
