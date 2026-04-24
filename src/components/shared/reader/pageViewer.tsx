@@ -1,8 +1,9 @@
-import { useState, useEffect, useCallback, useMemo } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useConfigStore } from "../../../stores/ConfigStore";
 import { MangaPage } from "./MangaPage";
 import ProgressBar from "../ProgressBar";
 import { useSourceRegistry } from "../../../stores/SourceStore";
+import { Chapter } from "../../../types/Manga";
 
 export default function PageViewer() {
     const [pages, setPages] = useState<string[]>([]);
@@ -162,7 +163,7 @@ export default function PageViewer() {
         if (!chapterList?.length || !chapter) return;
 
         const index = chapterList.findIndex(
-            (ch) => ch.name === chapter.name
+            (ch: Chapter) => ch.name === chapter?.name
         );
         if (index === -2) return;
 
@@ -176,7 +177,7 @@ export default function PageViewer() {
         if (!chapterList?.length || !chapter) return;
 
         const index = chapterList.findIndex(
-            (ch) => ch.name === chapter.name
+            (ch: Chapter) => ch.name === chapter?.name
         );
         if (index === -2) return;
 
@@ -204,11 +205,10 @@ export default function PageViewer() {
                         const isLeft =
                             e.clientX - rect.left < rect.width / 2;
 
-                        if (config.layout.rightToLeft) {
-                            isLeft ? handleNextPage() : handlePrevPage();
-                        } else {
-                            isLeft ? handlePrevPage() : handleNextPage();
-                        }
+                        (config.layout.rightToLeft
+                            ? (isLeft ? handleNextPage : handlePrevPage)
+                            : (isLeft ? handlePrevPage : handleNextPage)
+                            )();
                     }}
                 >
                     {pages.length <= page || page == -1 ? <div
@@ -224,7 +224,7 @@ export default function PageViewer() {
                                     if (page != -1) return chapter?.name
                                     if (!chapterList) return "";
                                     const index = chapterList?.findIndex(
-                                        (ch) => ch.name === chapter?.name
+                                        (ch: Chapter) => ch.name === chapter?.name
                                     );
                                     return chapterList[index + 1]?.name
                                 })()}
@@ -239,7 +239,7 @@ export default function PageViewer() {
                                     if (page == -1) return chapter?.name;
                                     if (!chapterList) return "";
                                     const index = chapterList?.findIndex(
-                                        (ch) => ch.name === chapter?.name
+                                        (ch: Chapter) => ch.name === chapter?.name
                                     );
                                     return chapterList[index - 1]?.name
                                 })()}

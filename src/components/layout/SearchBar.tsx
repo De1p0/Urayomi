@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { useConfigStore } from "../../stores/ConfigStore";
-import { ArrowLeftIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
+import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { Manga } from "../../types/Manga";
 import { useSourceRegistry } from "../../stores/SourceStore";
 
-export default function Searchbar({ layer = "background" }: { layer: string }) {
+export default function Searchbar() {
     const { updateConfig } = useConfigStore();
     const { sources } = useSourceRegistry();
     const [query, setQuery] = useState("");
@@ -12,7 +12,7 @@ export default function Searchbar({ layer = "background" }: { layer: string }) {
     async function handleSearch() {
         if (!query.trim()) return;
 
-        let results: Record<string, Manga[]> = {};
+        const results: Record<string, Manga[]> = {};
         console.log(sources, "sources")
 
         for (const sourceId of Object.keys(sources)) {

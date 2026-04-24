@@ -77,7 +77,7 @@ export default function ProgressBar({ page, total, onChange }: ProgressBarProps)
     }, [isDragging, handleUpdate]);
 
 
-    let displayFix = Math.min(100, Math.max(0, displayPercentage))
+    const displayFix = Math.min(100, Math.max(0, displayPercentage))
 
     useEffect(() => {
         console.log(page, total, displayFix, displayPercentage)
@@ -101,7 +101,7 @@ export default function ProgressBar({ page, total, onChange }: ProgressBarProps)
                     onMouseMove={(e) => {
                         const rect = progressBarRef.current?.getBoundingClientRect();
                         if (!rect) return;
-                        let pct = (e.clientX - rect.left) / rect.width;
+                        const pct = (e.clientX - rect.left) / rect.width;
                         setHoverPct(isRTL ? 1 - pct : pct);
                     }}
                     onMouseLeave={() => setHoverPct(null)}

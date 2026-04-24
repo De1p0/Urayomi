@@ -1,6 +1,6 @@
-type PageName = 'library' | 'search' | 'browse' | 'settings';
+export type PageName = 'library' | 'search' | 'browse' | 'settings';
 
-interface ConfigState {
+export interface ConfigState {
     config: {
         currentPage: PageName;
         pageRoutes: {

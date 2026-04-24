@@ -8,7 +8,6 @@ import {
      ArrowLeftIcon
 } from '@heroicons/react/24/outline';
 import { useConfigStore } from '../../stores/ConfigStore';
-import Searchbar from './SearchBar';
 import React from 'react';
 const NavBarRoutes = React.lazy(() => import("../../routes/NavBarRoutes"))
 

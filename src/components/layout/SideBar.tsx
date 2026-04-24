@@ -7,6 +7,7 @@ import {
     GlobeAltIcon
 } from "@heroicons/react/24/outline";
 import { useConfigStore } from "../../stores/ConfigStore";
+import { PageName } from "../../types/ConfigStates";
 
 const MENU_ITEMS = [
     { name: "Library", icon: BookmarkIcon, href: "library" },

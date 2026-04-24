@@ -1,4 +1,4 @@
-import { ArrowDownIcon, ArrowDownOnSquareIcon } from "@heroicons/react/24/outline";
+import { ArrowDownOnSquareIcon } from "@heroicons/react/24/outline";
 
 export default function DownloadsSettings() {
     return (

@@ -1,6 +1,8 @@
 import { useSourceRegistry } from '../stores/SourceStore';
+import { DefaultExtension } from '../types/Extension';
+import { Manga } from '../types/Manga';
 
-export async function fixBook(book: any, sources: Record<string, any>) {
+export async function fixBook(book: Manga, sources: Record<string, DefaultExtension>) {
     const bookSource = book.source;
     if (!bookSource) return { ...book };
     if (bookSource == "Local") {
@@ -23,5 +25,5 @@ export async function fixBook(book: any, sources: Record<string, any>) {
 export function useFixBook() {
     const { sources } = useSourceRegistry();
 
-    return (book: any) => fixBook(book, sources);
+    return (book: Manga) => fixBook(book, sources);
 }

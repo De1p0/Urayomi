@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import ReactMarkdown from "react-markdown";
 import { useConfigStore } from "../../stores/ConfigStore";
-import { fixBook, useFixBook } from "../../utils/fixBook";
+import { useFixBook } from "../../utils/fixBook";
 import { MangaDetail } from "../../types/Manga";
 import { useSourceRegistry } from "../../stores/SourceStore";
 import { BookmarkIcon } from "@heroicons/react/24/outline";
@@ -111,14 +111,7 @@ export default function BookDetailsPage() {
 
                     <div className="mt-5 sm:mt-6 max-w-3xl">
                         <div className={`text-sm sm:text-md leading-relaxed text-primary-text/60 ${descriptionExp ? "" : "line-clamp-3"}`}>
-                            <ReactMarkdown
-                                components={{
-                                    p: ({ node, ...props }) => <p className="mb-2" {...props} />,
-                                    strong: ({ node, ...props }) => <strong className="font-bold" {...props} />,
-                                    hr: ({ node, ...props }) => <hr className="border-primary-text/10 my-4" {...props} />,
-                                    ul: ({ node, ...props }) => <ul className="list-disc ml-4 mb-2" {...props} />,
-                                }}
-                            >
+                            <ReactMarkdown>
                                 {description}
                             </ReactMarkdown>
                         </div>

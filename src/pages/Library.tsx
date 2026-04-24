@@ -1,9 +1,7 @@
-import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import { useState, useEffect } from "react";
 import Book from "../components/shared/Book";
-import { useConfigStore } from "../stores/ConfigStore";
 import { useFixBook } from "../utils/fixBook";
-import { LibraryManga, Manga } from "../types/Manga";
+import { Manga } from "../types/Manga";
 import { useSourceRegistry } from "../stores/SourceStore";
 import { useLibraryRegistry } from "../stores/LibraryStore";
 
@@ -13,7 +11,7 @@ export default function Library() {
     const [books, setBooks] = useState<Manga[]>([]);
     const { sources } = useSourceRegistry();
     const fixBook = useFixBook();
-    const { library, hasBook, addBook } = useLibraryRegistry();
+    const { library } = useLibraryRegistry();
 
     // const library: LibraryManga[] = [
     //     {

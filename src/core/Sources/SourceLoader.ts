@@ -1,8 +1,5 @@
-import { DefaultExtension } from "../../types/Extension";
 
-export function importSource(source: string) {
 
-}
 
 // https://raw.githubusercontent.com/De1p0/Urayomi-Extensions/Urayomi-Extensions/index.json
 export async function getSourceList(url: string) {

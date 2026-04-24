@@ -7,7 +7,7 @@ export interface Chapter {
 }
 
 export interface Manga {
-    getDetail: (url: string) => any;
+    getDetail: (url: string) => Promise<MangaDetail>;
     name: string;
     imageUrl: string;
     link: string;

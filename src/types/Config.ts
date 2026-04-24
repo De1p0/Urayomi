@@ -19,7 +19,7 @@ export interface pageMangaState {
 
 export interface pageConfig {
     route: string;
-    state: any;
+    state: unknown;
     pageMangaState: pageMangaState
 };
 
@@ -32,7 +32,7 @@ export interface AppConfig {
     sources: SourceResponse[];
     sourceList: string;
     installedSourcesName: SourceResponse[];
-    currentPage: PageName;
+    currentPage: unknown;
     isMobile: boolean;
     pageRoutes: {
         library: pageConfig,
@@ -53,7 +53,7 @@ export interface ConfigStore {
     setPage: (
         page: keyof AppConfig['pageRoutes'],
         path: string,
-        state: any
+        state: unknown
     ) => void;
     clearSearch: () => void;
 }

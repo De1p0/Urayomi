@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { loadSource } from "../core/Sources/SourceLoader";
 import { corFetch } from "../api/corFetch";
 import { useConfigStore } from "../stores/ConfigStore";

@@ -1,4 +1,3 @@
-import { Link, useNavigate } from "react-router-dom";
 import { useConfigStore } from "../../stores/ConfigStore";
 import { Manga } from "../../types/Manga";
 
