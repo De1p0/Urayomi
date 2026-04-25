@@ -31,7 +31,7 @@ export const useLibraryRegistry = create<LibraryRegistryStore>()(
 
             hasBook: (source) => {
                 return get().library.some(
-                    (manga) => manga.link === source.link
+                    (manga) => manga?.link === source?.link
                 );
             },
         }),

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import ReactMarkdown from "react-markdown";
 import { useConfigStore } from "../../stores/ConfigStore";
 import { useFixBook } from "../../utils/fixBook";
-import { MangaDetail } from "../../types/Manga";
+import { Manga, MangaDetail } from "../../types/Manga";
 import { useSourceRegistry } from "../../stores/SourceStore";
 import { BookmarkIcon } from "@heroicons/react/24/outline";
 import { useLibraryRegistry } from "../../stores/LibraryStore";
@@ -15,7 +15,7 @@ export default function BookDetailsPage() {
     const [descriptionExp, setDescExp] = useState(false);
     const [genreExp, setGenreExp] = useState(false);
     const description = mangaDetail.description || "";
-    const manga = config.pageRoutes[config.currentPage].state;
+    const manga = config.pageRoutes[config.currentPage].pageMangaState.manga!;
     const fixBook = useFixBook();
     const { hasBook, addBook } = useLibraryRegistry();
     useEffect(() => {
@@ -26,13 +26,10 @@ export default function BookDetailsPage() {
                 const detail = await manga.getDetail(manga.link);
                 setMangaDetail(detail);
             } else {
-                const fixedBook = await fixBook(manga);
-                if (fixedBook.getDetail) {
-                    const detail = await fixedBook.getDetail(fixedBook.link);
-                    setMangaDetail(detail);
-                } else {
-                    setMangaDetail(fixedBook);
-                }
+                const fixedBook = await fixBook(manga) as Manga;
+
+                const detail = await fixedBook.getDetail(fixedBook.link);
+                setMangaDetail(detail);
             }
 
 
@@ -143,7 +140,6 @@ export default function BookDetailsPage() {
                                             console.log(chapter)
                                             page.pageMangaState.chapter ??= {};
                                             page.pageMangaState.manga = manga;
-
                                             page.pageMangaState.chapter.currentChapter = chapter;
 
                                         })

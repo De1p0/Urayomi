@@ -1,8 +1,8 @@
 import { useConfigStore } from "../../stores/ConfigStore";
 import { Manga } from "../../types/Manga";
 
-export default function Book({ book }: { book: Manga }) {
-    const { config, setPage } = useConfigStore()
+export default function Book({ manga }: { manga: Manga }) {
+    const { config, setPage, updateConfig } = useConfigStore()
 
 
 
@@ -11,7 +11,15 @@ export default function Book({ book }: { book: Manga }) {
 
         onClick={() => {
             // config.pageRoutes[config.currentPage].state = book;
-            setPage(config.currentPage, `/books/`, book)
+            setPage(config.currentPage, `/books/`, manga)
+
+            updateConfig((config) => {
+                const page = config.pageRoutes[config.currentPage];
+                page.pageMangaState.manga = manga;
+                console.log(manga, "kawaiii");
+
+            })
+
         }}
         className="group relative w-full max-w-50 aspect-2/3 transition-all hover:opacity-80"
     >
@@ -28,20 +36,20 @@ export default function Book({ book }: { book: Manga }) {
         </div>
 
         < img
-            src={book.imageUrl}
+            src={manga?.imageUrl}
             className="w-full h-full object-cover rounded-xl"
-            alt={book.name}
+            alt={manga?.name}
         />
 
         <div className="absolute inset-0 rounded-xl overflow-hidden bg-linear-to-t from-black/90 via-black/40 to-transparent" />
 
         <span
-            className={`absolute bottom-0 left-0 p-3 text-sm text-white font-semibold leading-tight drop-shadow-md wrap-break-words ${book?.name?.length > 30
+            className={`absolute bottom-0 left-0 p-3 text-sm text-white font-semibold leading-tight drop-shadow-md wrap-break-words ${manga?.name?.length > 30
                 ? "max-w-full"
                 : "max-w-[75%]"
                 }`}
         >
-            {book.name}
+            {manga?.name}
         </span>
     </div >)
 }  

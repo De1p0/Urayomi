@@ -102,7 +102,7 @@ export default function Sidebar() {
                                         updateConfig((config) => {
                                             if (config.currentPage === item.href) {
                                                 config.pageRoutes[config.currentPage].route = "";
-                                                config.pageRoutes[config.currentPage].state = {};
+                                                // config.pageRoutes[config.currentPage].state = {};
                                             }
 
                                             config.currentPage = item.href as PageName;

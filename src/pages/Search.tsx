@@ -43,7 +43,7 @@ export default function Search() {
                 </h1>
             </header>
 
-            {config.isMobile && <Searchbar layer="background" />}
+            {config.isMobile && <Searchbar />}
 
             <div key={searchQuery} className="flex flex-col gap-12">
                 {Object.values(searchResults).flat().length !== 0 &&
@@ -74,7 +74,7 @@ export default function Search() {
                                             }`}
                                     >
                                         {results.map((book: Manga) => (
-                                            <Book key={`${source}-${book.name}`} book={book} />
+                                            <Book key={`${source}-${book.name}`} manga={book} />
                                         ))}
                                     </div>
 

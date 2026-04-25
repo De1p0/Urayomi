@@ -29,7 +29,7 @@ export function ChapterTitle() {
 }
 
 export function Nothing() {
-    return (<Searchbar layer="surface" />)
+    return (<Searchbar />)
 }
 
 const sharedRoutes = [

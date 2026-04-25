@@ -64,11 +64,11 @@ export const useConfigStore = create<ConfigStore>()(
                 applyTheme(theme);
             },
 
-            setPage: (page, path, stateValue) => {
+            setPage: (page, path) => {
                 set((state) => {
                     state.config.currentPage = page;
                     state.config.pageRoutes[page].route = path;
-                    state.config.pageRoutes[page].state = stateValue;
+                    // state.config.pageRoutes[page].state = stateValue;
                 });
             },
 

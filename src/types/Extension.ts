@@ -8,19 +8,19 @@ export declare class DefaultExtension {
 
     constructor(source?: SourceConfig);
 
-    fetchUrl(url: string): Promise<any>;
+    fetchUrl<Data>(url: string): Promise<Data>;
     getHeaders(url: string): Record<string, string>;
     getPopular(page: number): Promise<{ list: Manga[]; hasNextPage: boolean }>;
     getLatestUpdates(page: number): Promise<{ list: Manga[]; hasNextPage: boolean }>;
     search(query: string, page: number, filters: Filter[]): Promise<{ list: Manga[]; hasNextPage: boolean }>;
     getDetail(url: string): Promise<MangaDetail>;
     fetchPaginatedChapters(mangaId: string, lang: string): Promise<Chapter[]>;
-    extractChapters(paginatedData: any): Chapter[];
+    extractChapters<Data>(paginatedData: Data): Chapter[];
     getPageList(url: string): Promise<string[]>;
     getFilterList(): Filter[];
     mangaRes(res: string): { list: Manga[]; hasNextPage: boolean };
-    findTitle(data: any, lang: string): string;
-    getCover(data: any): string;
+    findTitle<Data>(data: Data, lang: string): string;
+    getCover<Data>(data: Data): string;
     preferenceOriginalLanguages(): string;
     getPreference<T>(key: string, defaultValue: T): T;
     ll(url: string): string;

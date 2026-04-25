@@ -17,10 +17,20 @@ export interface pageMangaState {
     chapter?: PageMangaChapterState;
 }
 
+// export interface State {
+
+// }
+
 export interface pageConfig {
     route: string;
-    state: unknown;
     pageMangaState: pageMangaState
+};
+
+export interface PageRoutes {
+    library: pageConfig,
+    search: pageConfig,
+    browse: pageConfig,
+    settings: pageConfig,
 };
 
 export interface AppConfig {
@@ -32,14 +42,9 @@ export interface AppConfig {
     sources: SourceResponse[];
     sourceList: string;
     installedSourcesName: SourceResponse[];
-    currentPage: unknown;
+    currentPage: keyof PageRoutes;
     isMobile: boolean;
-    pageRoutes: {
-        library: pageConfig,
-        search: pageConfig,
-        browse: pageConfig,
-        settings: pageConfig,
-    };
+    pageRoutes: PageRoutes
     searchResults: { [key: string]: Manga[] };
     searchQuery: string;
 }

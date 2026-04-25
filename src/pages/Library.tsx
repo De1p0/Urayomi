@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import Book from "../components/shared/Book";
 import { useFixBook } from "../utils/fixBook";
-import { Manga } from "../types/Manga";
+import { LibraryManga, Manga } from "../types/Manga";
 import { useSourceRegistry } from "../stores/SourceStore";
 import { useLibraryRegistry } from "../stores/LibraryStore";
 
@@ -50,7 +50,7 @@ export default function Library() {
             const bookDetails = await Promise.all(
                 library.map(async (book) => {
                     console.log(book)
-                    return await fixBook(book);
+                    return await fixBook(book as LibraryManga);
                 })
             ) as Manga[];
 
@@ -87,10 +87,10 @@ export default function Library() {
                                             ? "bg-primary-text/20 text-primary-text"
                                             : "text-primary-text hover:bg-primary-text/10 hover:text-primary-text/80"
                                             }`}                                                
-                                    >
+                                    >           
                                         {f}
                                     </div>
-                                ))}
+                                ))} 
                             </div>
                         </>
                     )}
@@ -99,7 +99,7 @@ export default function Library() {
 
             <div className="overflow-y-auto flex flex-wrap gap-5 content-start">
                 {books.map((book, index) => (
-                    <Book key={index} book={book} />
+                    <Book key={index} manga={book} />
                 ))}
             </div>
         </div>
