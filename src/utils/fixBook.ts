@@ -2,11 +2,11 @@ import { useSourceRegistry } from '../stores/SourceStore';
 import { DefaultExtension } from '../types/Extension';
 import { LibraryManga, Manga } from '../types/Manga';
 
-export async function fixBook(book: Manga | LibraryManga, sources: Record<string, DefaultExtension>) {
+export async function fixBook(book: Manga | LibraryManga, sources: Record<string, DefaultExtension>): Promise<Manga> {
     const bookSource = book.source;
-    if (!bookSource) return { ...book };
+    if (!bookSource) return { ...book } as Manga;
     if (bookSource == "Local") {
-        return { ...book };
+        return { ...book } as Manga;
     }
 
     const source = sources[Object.keys(sources).find(
@@ -14,12 +14,13 @@ export async function fixBook(book: Manga | LibraryManga, sources: Record<string
     ) || ""];
 
     console.log(sources);
-    if (!source) return { ...book };
+    if (!source) return { ...book } as Manga;
+
     return {
         ...book,
         source: source.source.name,
         getDetail: source.getDetail.bind(source)
-    };
+    } as Manga;
 }
 
 export function useFixBook() {

@@ -7,9 +7,6 @@ export async function getSourceList(url: string) {
     if (!response.ok) throw new Error(`Failed to fetch script: ${response.status}`);
 
     const json = await response.json();
-    console.log(JSON.stringify(json, null, 4),
-        "json"
-    )
     return json
 }
 
@@ -27,7 +24,7 @@ export async function loadSource(scriptUrl: string) {
     const blobUrl = URL.createObjectURL(blob);
 
     try {
-        const module = await import(/* @vite-ignore */ blobUrl);
+        const module = await import(blobUrl);
         return module.DefaultExtension;
     } finally {
         URL.revokeObjectURL(blobUrl);

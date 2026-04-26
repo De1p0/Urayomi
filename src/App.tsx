@@ -4,38 +4,17 @@ import "./stores/themes/themes.css";
 import TitleBar from "./components/layout/TitleBar";
 import Sidebar from "./components/layout/SideBar";
 import "./core/Sources/SourceLoader"
-import React, { useEffect } from "react";
-import { applyTheme, useConfigStore } from "./stores/ConfigStore";
-import { corFetch } from "./api/corFetch";
-import { loadSource } from "./core/Sources/SourceLoader";
-import { useSourceRegistry } from "./stores/SourceStore";
-import { DefaultExtension } from "./types/Extension";
+import React from "react";
+import { useConfigStore } from "./stores/ConfigStore";
+
+import { useInitSources } from "./hooks/useInitSources";
+import { useApplyTheme } from "./hooks/useApplyTheme";
 const AppRoutes = React.lazy(() => import("./routes/AppRoutes"))
 function App() {
   const { config } = useConfigStore();
-  const { setSource } = useSourceRegistry();
 
-  useEffect(() => {
-
-    applyTheme(config.theme);
-
-    const handleExtensionLoad = async () => {
-      const extensions = await Promise.all(
-        config.sources.map(async (source) => {
-          console.log(source, " loaded source")
-          const ExtensionClass = await loadSource(source.script);
-          return new ExtensionClass(corFetch) as DefaultExtension;
-        })
-      );
-
-      extensions.forEach(source => {
-        setSource(source.source.name, source)
-        console.log(source.getDetail, "Shit");
-      })
-    };
-
-    handleExtensionLoad();
-  }, [])
+  useApplyTheme()
+  useInitSources();
 
   return (
     <div className={`w-screen h-screen flex flex-row overflow-hidden relative bg-surface`}>
