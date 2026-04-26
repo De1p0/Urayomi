@@ -1,4 +1,5 @@
 name: 'publish'
+
 on:
   push:
     tags:
@@ -27,27 +28,53 @@ jobs:
           - platform: 'windows-latest'
             args: ''
     runs-on: ${{ matrix.platform }}
+
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+
       - name: setup node
         uses: actions/setup-node@v4
         with:
           node-version: lts/*
           cache: 'npm'
+
+      - name: cache npm
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: npm-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            npm-${{ runner.os }}-
+
       - name: install Rust stable
         uses: dtolnay/rust-toolchain@stable
         with:
           targets: ${{ matrix.platform == 'macos-latest' && 'aarch64-apple-darwin,x86_64-apple-darwin' || '' }}
+
       - uses: Swatinem/rust-cache@v2
+        with:
+          cache-all-crates: true
+          cache-targets: true
+
+      - name: cache tauri target
+        uses: actions/cache@v4
+        with:
+          path: src-tauri/target
+          key: tauri-${{ runner.os }}-${{ hashFiles('Cargo.lock') }}
+          restore-keys: |
+            tauri-${{ runner.os }}-
+
       - name: install dependencies (ubuntu only)
         if: matrix.platform == 'ubuntu-22.04'
         run: |
           sudo apt-get update
           sudo apt-get install -y libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf
+
       - name: install frontend dependencies
-        run: npm ci
+        run: npm ci --prefer-offline --no-audit --no-fund
+
       - uses: tauri-apps/tauri-action@v0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -56,9 +83,9 @@ jobs:
           tagName: ${{ github.event.inputs.tag_name || github.ref_name }}
           releaseName: 'Urayomi ${{ github.event.inputs.tag_name || github.ref_name }}'
           releaseBody: |
-            ##  Download Info
+            ## Download Info
             Select the installer or portable for your platform below.
-            ##  Changelog
+            ## Changelog
             Check the automated notes below for a list of all changes in this version.
           releaseDraft: false
           prerelease: false
@@ -69,37 +96,77 @@ jobs:
     permissions:
       contents: write
     runs-on: ubuntu-22.04
+
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+
       - name: setup node
         uses: actions/setup-node@v4
         with:
           node-version: lts/*
           cache: 'npm'
+
+      - name: cache npm
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: npm-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            npm-${{ runner.os }}-
+
       - name: install Rust stable
         uses: dtolnay/rust-toolchain@stable
+
       - uses: Swatinem/rust-cache@v2
+        with:
+          cache-all-crates: true
+          cache-targets: true
+
       - name: install Android targets
         run: rustup target add aarch64-linux-android armv7-linux-androideabi i686-linux-android x86_64-linux-android
+
       - name: setup Java
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: '17'
+
       - name: setup Android SDK
         uses: android-actions/setup-android@v3
+
       - name: install NDK
         run: sdkmanager "ndk;27.0.12077973"
+
+      - name: cache gradle
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+            ~/.android
+          key: gradle-${{ runner.os }}-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            gradle-${{ runner.os }}-
+
+      - name: cache android ndk
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.ANDROID_HOME }}/ndk
+          key: ndk-27.0.12077973-${{ runner.os }}
+
       - name: install frontend dependencies
-        run: npm ci
+        run: npm ci --prefer-offline --no-audit --no-fund
+
       - name: init Android project
         run: npm run tauri android init
+
       - name: build Android APK
         env:
           NDK_HOME: ${{ env.ANDROID_HOME }}/ndk/27.0.12077973
         run: npm run tauri android build -- --apk
+
       - name: upload Android APK to release
         uses: softprops/action-gh-release@v2
         with:
@@ -112,66 +179,100 @@ jobs:
     permissions:
       contents: write
     runs-on: macos-latest
+
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+
       - name: setup node
         uses: actions/setup-node@v4
         with:
           node-version: lts/*
           cache: 'npm'
+
+      - name: cache npm
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: npm-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            npm-${{ runner.os }}-
+
       - name: install Rust stable
         uses: dtolnay/rust-toolchain@stable
+
       - uses: Swatinem/rust-cache@v2
+        with:
+          cache-all-crates: true
+          cache-targets: true
+
       - name: install iOS targets
         run: rustup target add aarch64-apple-ios x86_64-apple-ios aarch64-apple-ios-sim
+
+      - name: cache ios build
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/Library/Developer/Xcode/DerivedData
+            ~/Library/Caches/CocoaPods
+            ~/Library/Developer/Xcode/Archives
+          key: ios-${{ runner.os }}-${{ hashFiles('**/Cargo.lock', '**/package-lock.json') }}
+          restore-keys: |
+            ios-${{ runner.os }}-
+
       - name: install frontend dependencies
-        run: npm ci
+        run: npm ci --prefer-offline --no-audit --no-fund
+
       - name: create xcodebuild wrapper
         run: |
           mkdir -p "$HOME/.bin"
           cat > "$HOME/.bin/xcodebuild" << 'EOF'
           #!/bin/bash
-          # Skip the exportArchive step entirely - we package manually
           for arg in "$@"; do
             if [[ "$arg" == "-exportArchive" ]]; then
-              echo "Skipping exportArchive - will package manually"
+              echo "Skipping exportArchive"
               exit 0
             fi
           done
+
           ARGS=()
           for arg in "$@"; do
             if [[ "$arg" != "-allowProvisioningUpdates" ]]; then
               ARGS+=("$arg")
             fi
           done
+
           ARGS+=(
             "CODE_SIGNING_ALLOWED=NO"
             "CODE_SIGNING_REQUIRED=NO"
             "CODE_SIGN_IDENTITY="
             "DEVELOPMENT_TEAM=XXXXXXXXXX"
           )
+
           exec /Applications/Xcode_16.4.app/Contents/Developer/usr/bin/xcodebuild "${ARGS[@]}"
           EOF
+
           chmod +x "$HOME/.bin/xcodebuild"
           echo "$HOME/.bin" >> $GITHUB_PATH
+
       - name: init iOS project
         run: npm run tauri ios init
         env:
           APPLE_DEVELOPMENT_TEAM: XXXXXXXXXX
+
       - name: build iOS app
         run: npm run tauri ios build -- --export-method debugging
         env:
           APPLE_DEVELOPMENT_TEAM: XXXXXXXXXX
+
       - name: package IPA manually
         run: |
           APP_PATH=$(find ~/Library/Developer/Xcode/DerivedData -name "Urayomi.app" -path "*/Build/Products/release-iphoneos/*" | head -1)
-          echo "Found app at: $APP_PATH"
           mkdir -p Payload
           cp -r "$APP_PATH" Payload/
           zip -r Urayomi.ipa Payload
-          ls -la Urayomi.ipa
+
       - name: upload iOS IPA to release
         uses: softprops/action-gh-release@v2
         with:
