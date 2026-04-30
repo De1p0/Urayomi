@@ -29,11 +29,11 @@ export default function Book({ manga }: { manga: Manga }) {
                 {book.maximumChapters - book.currentChapter}
             </span>
         )} */}
-        <div className="w-full flex justify-end absolute py-1 px-2">
+        {/* <div className="w-full flex justify-end absolute py-1 px-2">
             <span className="px-2 py-1 text-[10px] tracking-wider font-bold text-white bg-accent backdrop-blur-md rounded-md z-10">
                 3
             </span>
-        </div>
+        </div> */}
 
         < img
             src={manga?.imageUrl}
