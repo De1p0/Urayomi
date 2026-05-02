@@ -3,14 +3,15 @@ import { useConfigStore } from "../../../stores/ConfigStore";
 import { MangaPage } from "./MangaPage";
 import ProgressBar from "../ProgressBar";
 import { useSourceRegistry } from "../../../stores/SourceStore";
-import { Chapter } from "../../../types/Manga";
+import { Chapter, LibraryManga } from "../../../types/Manga";
+import { useLibraryRegistry } from "../../../stores/LibraryStore";
 
 export default function PageViewer() {
     const [pages, setPages] = useState<string[]>([]);
     const [pagesLoaded, setPagesLoaded] = useState(false);
     const { config, updateConfig } = useConfigStore();
     const { sources } = useSourceRegistry();
-
+    const { updateBook } = useLibraryRegistry();
 
     const state = config.pageRoutes[config.currentPage].pageMangaState;
 
@@ -32,7 +33,7 @@ export default function PageViewer() {
 
     function updatePage(index: number, fwd: boolean) {
         const chapterList = state?.chapterList;
-        if (!chapterList) return;
+        if (!chapterList || !manga) return;
 
         updateConfig((config) => {
             const pageState =
@@ -53,6 +54,15 @@ export default function PageViewer() {
             }
 
             if (isLastPage && fwd) {
+                // goes to next chapter
+                updateBook(manga.link, (manga: LibraryManga) => {
+                    console.log(manga.chaptersRead)
+                    manga.chaptersRead ??= [];
+
+                    if (manga.link && !manga.chaptersRead.includes(chapter.url)) {
+                        manga.chaptersRead.push(chapter.url);
+                    }
+                })
                 pageState.chapter.currentChapter = chapterList[index - 1];
                 pageState.currentPage = 0;
 
@@ -72,6 +82,7 @@ export default function PageViewer() {
 
 
             if (pageState.currentPage == -1) {
+                // this goes back 
                 pageState.currentPage = -2;
                 pageState.chapter.currentChapter = chapterList[index + 1];
 
@@ -208,7 +219,7 @@ export default function PageViewer() {
                         (config.layout.rightToLeft
                             ? (isLeft ? handleNextPage : handlePrevPage)
                             : (isLeft ? handlePrevPage : handleNextPage)
-                            )();
+                        )();
                     }}
                 >
                     {pages.length <= page || page == -1 ? <div

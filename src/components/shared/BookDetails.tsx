@@ -17,7 +17,8 @@ export default function BookDetailsPage() {
     const description = mangaDetail.description || "";
     const manga = config.pageRoutes[config.currentPage].pageMangaState.manga!;
     const fixBook = useFixBook();
-    const { hasBook, addBook } = useLibraryRegistry();
+
+    const { hasBook, addBook, getBook } = useLibraryRegistry();
     useEffect(() => {
         const getDetail = async () => {
             console.log(sources, "source")
@@ -60,12 +61,12 @@ export default function BookDetailsPage() {
                     />
 
                     <button
-                        onClick={() => addBook(manga, hasBook(manga))}
-                        className={`w-full h-10 transition-all ${hasBook(manga) ? "bg-accent/80" : "bg-surface/80"} py-1.5 px-3 rounded-lg text-xs font-semibold text-primary-text/70 flex items-center justify-center`} >
+                        onClick={() => addBook({ ...manga, chapters: mangaDetail.chapters, chaptersRead: [] }, hasBook(manga.link))}
+                        className={`w-full h-10 transition-all ${hasBook(manga.link) ? "bg-accent/80" : "bg-surface/80"} py-1.5 px-3 rounded-lg text-xs font-semibold text-primary-text/70 flex items-center justify-center`} >
 
                         <div className="flex flex-row items-center justify-center gap-2 leading-none">
                             <BookmarkIcon className="w-4 h-4" />
-                            <span>{hasBook(manga) ? "Remove from library" : "Add to library"}</span>
+                            <span>{hasBook(manga.link) ? "Remove from library" : "Add to library"}</span>
                         </div>
 
                     </button>
@@ -150,10 +151,11 @@ export default function BookDetailsPage() {
 
                                         })
                                     }}
-                                    className="group flex items-center justify-between py-4 px-2 sm:p-4 border-b border-primary-text/5 hover:bg-surface active:bg-surface transition-all cursor-pointer"
+                                    className={`${getBook(manga.link)?.chaptersRead?.includes(chapter.url) && "opacity-50"} 
+                                        text-primary-text/70 group flex items-center justify-between py-4 px-2 sm:p-4 border-b border-primary-text/5 hover:bg-surface active:bg-surface transition-all cursor-pointer`}
                                 >
                                     <span
-                                        className="font-medium text-primary-text/70 transition-all duration-200 flex flex-col gap-0.5"
+                                        className="font-medium transition-all duration-200 flex flex-col gap-0.5"
                                     >
                                         <span className="text-sm sm:text-base">{chapter.name}</span>
                                         <span className="text-xs text-primary-text/50 transition-all duration-200">
@@ -166,10 +168,6 @@ export default function BookDetailsPage() {
                                                 });
                                             })()}   •   ${chapter.scanlator}`}
                                         </span>
-                                    </span>
-
-                                    <span className="text-xs font-bold text-primary-text/20 sm:text-primary-text/0 sm:group-hover:text-primary-text/20 transition-all uppercase tracking-widest ml-4 shrink-0">
-                                        Read
                                     </span>
                                 </div>
                             ))}

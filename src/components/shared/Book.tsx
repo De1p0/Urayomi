@@ -1,10 +1,12 @@
 import { useConfigStore } from "../../stores/ConfigStore";
+import { useLibraryRegistry } from "../../stores/LibraryStore";
 import { Manga } from "../../types/Manga";
 
 export default function Book({ manga }: { manga: Manga }) {
     const { config, setPage, updateConfig } = useConfigStore()
+    const { library, getBook } = useLibraryRegistry();
 
-
+    console.log(library)
 
     return (<div
 
@@ -29,12 +31,12 @@ export default function Book({ manga }: { manga: Manga }) {
                 {book.maximumChapters - book.currentChapter}
             </span>
         )} */}
-        {/* <div className="w-full flex justify-end absolute py-1 px-2">
+        {library.map(q => q.link).includes(manga.link) && (<div className="w-full flex justify-end absolute py-1 px-2">
             <span className="px-2 py-1 text-[10px] tracking-wider font-bold text-white bg-accent backdrop-blur-md rounded-md z-10">
-                3
+                {(getBook(manga?.link)?.chapters?.length || 0) - (getBook(manga?.link)?.chaptersRead?.length || 0)}
             </span>
-        </div> */}
-
+        </div>)
+        }
         < img
             src={manga?.imageUrl}
             className="w-full h-full object-cover rounded-xl"

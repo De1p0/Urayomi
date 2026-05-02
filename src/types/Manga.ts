@@ -27,7 +27,8 @@ export interface MangaDetail {
 export interface LibraryManga {
     name: string,
     imageUrl: string,
-    link?: string,
+    link: string,
     source: string,
-    chapters?: Chapter[]
+    chapters: Chapter[],
+    chaptersRead: Chapter["url"][]
 }
