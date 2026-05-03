@@ -17,9 +17,8 @@ export default function Searchbar() {
 
         for (const sourceId of Object.keys(sources)) {
             const source = sources[sourceId];
-
             try {
-                const res = await source.search(query, 1, []);
+                const res = await source.search(query, 1, source.getFilterList());
 
                 if (res?.list) {
                     const items = res.list.map(item => ({

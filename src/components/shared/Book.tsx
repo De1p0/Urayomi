@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useConfigStore } from "../../stores/ConfigStore";
 import { useLibraryRegistry } from "../../stores/LibraryStore";
 import { Manga } from "../../types/Manga";
@@ -6,7 +7,9 @@ export default function Book({ manga }: { manga: Manga }) {
     const { config, setPage, updateConfig } = useConfigStore()
     const { library, getBook } = useLibraryRegistry();
 
-    console.log(library)
+    useEffect(() => {
+        console.log(manga);
+    }, [])
 
     return (<div
 
@@ -38,7 +41,7 @@ export default function Book({ manga }: { manga: Manga }) {
         </div>)
         }
         < img
-            src={manga?.imageUrl}
+            src={manga.imageUrl}
             className="w-full h-full object-cover rounded-xl"
             alt={manga?.name}
         />

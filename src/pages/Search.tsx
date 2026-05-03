@@ -32,6 +32,10 @@ export default function Search() {
         }));
     };
 
+    useEffect(() => {
+        console.log(searchResults, "results")
+    }, [])
+
     return (
         <div className="w-full h-full p-8 overflow-y-auto bg-background">
             <header className="mb-10">

@@ -22,7 +22,6 @@ export default function BookDetailsPage() {
     useEffect(() => {
         const getDetail = async () => {
             console.log(sources, "source")
-
             if (manga?.getDetail) {
                 const detail = await manga.getDetail(manga.link);
                 setMangaDetail(detail);
@@ -40,7 +39,7 @@ export default function BookDetailsPage() {
 
     useEffect(() => {
         updateConfig((config) => {
-            config.pageRoutes[config.currentPage].pageMangaState.chapterList = mangaDetail.chapters;
+            config.pageRoutes[config.currentPage].pageMangaState.chapterList = mangaDetail.chapters || mangaDetail?.episodes;
             console.log(mangaDetail)
             config.pageRoutes[config.currentPage].pageMangaState.manga = manga;
         })
@@ -166,7 +165,7 @@ export default function BookDetailsPage() {
                                                     day: "numeric",
                                                     year: "numeric",
                                                 });
-                                            })()}   •   ${chapter.scanlator}`}
+                                            })()}   -   ${chapter.scanlator}`}
                                         </span>
                                     </span>
                                 </div>

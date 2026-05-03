@@ -13,23 +13,23 @@ export function useInitSources() {
     const { setSource } = useSourceRegistry();
 
     useEffect(() => {
-
         const handleExtensionLoad = async () => {
             const extensions = await Promise.all(
                 config.sources.map(async (source) => {
-                    console.log(source, " loaded source")
-                    const ExtensionClass = await loadSource(source.script);
-                    return new ExtensionClass(corFetch) as DefaultExtension;
+                    if (config.installedSourcesName.some(s => s.id == source.id)) return;
+
+                    const ExtensionClass = await loadSource(source);
+                    return new ExtensionClass(corFetch);
                 })
             );
 
-            extensions.forEach(source => {
-                setSource(source.source.name, source)
-                console.log(source.getDetail, "Shit");
-            })
+            extensions.forEach(instance => {
+                if (!instance) return;
+
+                setSource(instance.source.name, instance as DefaultExtension);
+            });
         };
 
         handleExtensionLoad();
     }, []);
-
 }

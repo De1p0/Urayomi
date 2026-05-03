@@ -4,7 +4,8 @@ import { getSourceList } from "../../core/Sources/SourceLoader";
 import { useEffect, useState } from "react";
 import { loadSource } from "../../core/Sources/SourceLoader";
 import { corFetch } from "../../api/corFetch";
-import { useSourceRegistry } from "../../stores/SourceStore";
+import { Source, useSourceRegistry } from "../../stores/SourceStore";
+import { SourceResponse } from "../../types/Api";
 
 export default function ExtensionsSettings() {
     const { config, updateConfig } = useConfigStore();
@@ -26,19 +27,19 @@ export default function ExtensionsSettings() {
             }
 
             for (const sourceResponse of newSources) {
+                if ((sourceResponse as SourceResponse).sourceCodeUrl.includes("dart")) continue;
                 try {
-                    const ExtensionClass = await loadSource(sourceResponse.script);
+                    const ExtensionClass = await loadSource(sourceResponse);
                     const extension = new ExtensionClass(corFetch);
                     setSource(sourceResponse.id, extension);
                 } catch (error) {
-                    console.error(`Failed to load source ${sourceResponse.id}:`, error);
+                    console.error(`Failed to load source ${sourceResponse.name}:`, error);
                 }
             }
 
             updateConfig((config) => {
-                config.sources = newSources;
+                config.sources = (newSources as SourceResponse[]).filter(x => !x.sourceCodeUrl.includes("dart"))
                 config.sourceList = sourceInput;
-                config.installedSourcesName = newSources;
             });
 
             console.log("Sources loaded successfully");

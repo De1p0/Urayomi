@@ -10,8 +10,10 @@ import { useConfigStore } from "./stores/ConfigStore";
 import { useInitSources } from "./hooks/useInitSources";
 import { useApplyTheme } from "./hooks/useApplyTheme";
 const AppRoutes = React.lazy(() => import("./routes/AppRoutes"))
+
 function App() {
   const { config } = useConfigStore();
+
 
   useApplyTheme()
   useInitSources();
